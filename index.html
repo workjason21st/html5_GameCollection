@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML5 小遊戲</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+      <h1 id="title">踩地雷</h1>
+      <p id="expand">Touch to show more games.</p>
+      <p id="select">Click on the game you want to play</p>
+      <ul id="nav">
+        <li><a href="#minesweeper" data-game="minesweeper" class="selected">踩地雷</a></li>
+          <li><a href="#whackamole" data-game="whackamole">打地鼠</a></li>
+          <li><a href="#snake" data-game="snake">貪食蛇</a></li>
+      </ul>
+  </header>
+  <iframe id="machine"></iframe>
+  
+  <script>
+    function play(game) {
+        "use strict";
+        document.querySelector("#nav li a.selected").className = "";
+        document.querySelector(`#nav li a[data-game=${game}]`).className = "selected";
+        document.getElementById("title").innerHTML = game;
+        document.getElementById("machine").src = `${game}/index.html`;
+        document.title = "HTML5 Games: " + game.substring(0, 1).toUpperCase() + game.substring(1);
+    }
+
+    window.addEventListener("load", () => {
+        "use strict";
+        const header = document.querySelector("header");
+        play(location.hash.substring(1) || "bounce");
+        document.querySelector("#nav").addEventListener("click", (e) => {
+            if (e.target.dataset.game) {
+                play(e.target.dataset.game);
+            }
+        });
+    }, false);
+  </script>
+</body>
+</html>

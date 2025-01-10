@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>打地鼠</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./game.js"></script>
+</head>
+<body>
+  <div id="home" class="homeScreen">
+    <h1>打地鼠</h1>
+    <label for="time">遊戲時長:</label>
+    <select id="time">
+      <option value="30">30秒</option>
+      <option value="60" selected>60秒</option>
+      <option value="90">90秒</option>
+    </select>
+    <br>
+    <button id="leaderboard">查看排行榜</button>
+    <div id="leaderboard-modal">
+      <h2 id="leaderboard-header">積分排行榜
+      <select id="leaderboard-select">
+        <option value="30">30秒</option>
+        <option value="60">60秒</option>
+        <option value="90">90秒</option>
+      </select>
+      </h2>
+      <p id="leaderboard-none">目前沒有紀錄</p>
+      <ol id="leaderboard-list">
+      </ol>
+      <button id="close-leaderboard">關閉</button>
+    </div>
+    <br>
+    <button id="start">開始遊戲</button>
+  </div>
+  <div id="container" class="gameScreen">
+    <header id="header">
+      <div id="scoreDisplay">分數: 0</div>
+      <div id="timeDisplay">時間: 60</div>
+    </header>
+    <div id="game">
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+    </div>
+    <div class="cursor"></div>
+  </div>
+</body>
+</html>

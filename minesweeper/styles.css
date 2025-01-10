@@ -1,0 +1,316 @@
+/* 遊戲背景樣式 */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 15px;
+    overflow: auto;
+}
+html, body, input {
+    color: black;
+    font-family: "Gill Sans MT Ext Condensed Bold";
+    text-shadow: #333 1px 1px 1px;
+}
+
+a {
+    color: #333;
+    text-shadow: #666 1px 1px 1px;
+    text-decoration: none;
+    outline: none;
+    font-size: 48px
+}
+a:hover {
+    color: black;
+    text-shadow: #333 1px 1px 1px;
+}
+
+input {
+    color: #333;
+    text-shadow: #666 1px 1px 1px;
+}
+
+
+/* Game Design */
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 700px;
+    height: 750px;
+    margin-top: 100px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 5px solid rgb(5, 134, 255);
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+}
+
+/* 內部標題區域 */
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 10px;
+    width: 680px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#header select, #header button {
+    font-size: 16px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+#difficulty {
+    background: #ffcc80;
+    color: #333;
+}
+
+#header span {
+    font-size: 20px;
+}
+
+#header button {
+    background: rgba(0, 0, 0, 0.3);
+    color: rgb(5, 134, 255);
+    cursor: pointer;
+}
+
+/* 遊戲規則模態框樣式 */
+#rules-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 15;
+}
+
+#rules-content {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 20px;
+}
+
+#rules-content h2 {
+    margin-top: 0;
+}
+
+#rules-content button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 訊息框樣式 */
+#message-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: rgb(255, 0, 255);
+    font-size: 36px;
+    text-align: center;
+    padding: 2px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+/* 幫助模態框樣式 */
+#help-modal {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    text-align:left;
+    color: rgb(0, 0, 0);
+    background: rgba(255, 255, 255, 0.7);
+    text-shadow: none;
+    z-index: 11;
+}
+
+/* 遊戲區域 */
+#game {
+    display: grid;
+    gap: 2px;
+    width: 700px;
+    height: 700px;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9;
+}
+
+
+/* 每個格子的基礎樣式 */
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    transition: transform 0.2s, background-color 0.3s;
+    text-shadow: none;
+}
+/* 滑過效果 */
+.cell:hover {
+    transform: scale(1.1);
+    background-color: #ffd700;
+}
+/* 已揭露格子的樣式 */
+.cell.revealed {
+    background: #e0e0e0;
+    color: #333333;
+    cursor: default;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.cell.mine {
+    background: #ffabab;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+/* 插旗樣式 */
+.cell.flagged {
+    background: linear-gradient(to bottom, #ffcc80, #ffab40);
+    color: #e65100;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* 根據數字顯示不同背景顏色 */
+/* 淺藍 */
+.cell.number-1 {
+    background-color: #e0e0e0;
+    color: #0b5394;
+}
+/* 淺綠 */
+.cell.number-2 {
+    background-color: #e0e0e0;
+    color: #38761d;
+}
+/* 淺紅 */
+.cell.number-3 {
+    background-color: #e0e0e0;
+    color: #990000;
+}
+/* 深藍 */
+.cell.number-4 {
+    background-color: #e0e0e0;
+    color: #073763;
+}
+/* 棕色 */
+.cell.number-5 {
+    background-color: #e0e0e0;
+    color: #783f04;
+}
+/* 紫色 */
+.cell.number-6 {
+    background-color: #e0e0e0;
+    color: #351c75;
+}
+/* 橙色 */
+.cell.number-7 {
+    background-color: #e0e0e0;
+    color: #783f04;
+}
+/* 灰色 */
+.cell.number-8 {
+    background-color: #e0e0e0;
+    color: #666;
+}
+
+#leaderboard-modal {
+    display: none;
+    position: absolute;
+    top: 20%;
+    left: -40%;
+    transform: translateX(-50%);
+    width: 300px;
+    font-size: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: grabbing;
+    z-index: 10;
+}
+
+#leaderboard-header {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    color: white;
+    text-decoration: overline underline; 
+    font-weight: bold;
+}
+#leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#leaderboard-list li {
+    margin: 5px 0;
+    color: rgb(255, 234, 176);
+}
+
+#leaderboard-list li:first-child {
+    margin: 10px 0;
+    font-size: 22px;
+    color: rgb(255, 200, 50);
+    font-weight: bold;
+}
+#leaderboard-select {
+    float: right;
+}
+
+#leaderboard-none{
+    display: none;
+}
+
+#close-leaderboard {
+    margin: 30px 0 0 0;
+    padding: 5px 10px;
+    font-size: 20px;
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

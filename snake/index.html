@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>貪食蛇</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./game.js"></script>
+</head>
+<body>
+  <div id="home" class="homeScreen">
+    <h1>貪食蛇</h1>
+    <ul>
+        <li><a href="#" data-action="play" data-level="1">簡單</a></li>
+        <li><a href="#" data-action="play" data-level="2">普通</a></li>
+        <li><a href="#" data-action="play" data-level="3">困難</a></li>
+        <li><a href="#" data-action="play" data-level="4">地獄</a></li>
+    </ul>
+    <br>
+    <button id="leaderboard">查看排行榜</button>
+    <div id="leaderboard-modal">
+      <h2 id="leaderboard-header">長度排行榜
+      <select id="leaderboard-select">
+        <option value="1">簡單</option>
+        <option value="2">普通</option>
+        <option value="3">困難</option>
+        <option value="4">地獄</option>
+      </select>
+      </h2>
+      <p id="leaderboard-none">目前沒有紀錄</p>
+      <ol id="leaderboard-list">
+      </ol>
+      <button id="close-leaderboard">關閉</button>
+    </div>
+  </div>
+  <div id="container" class="gameScreen">
+    <header id="header">
+      <div id="score">長度: 0</div>
+      <div id="level">難度: 1</div>
+      <div id="time">時間: 0</div>
+    </header>
+    <div id="game">
+    </div>
+  </div>
+</body>
+</html>

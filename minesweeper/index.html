@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>踩地雷</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="./game.js"></script>
+</head>
+<body>
+  <div id="container" class="gameScreen">
+  <header id="header">
+    <select id="difficulty">
+      <option value="easy">簡單 (8x8、10地雷)</option>
+      <option value="medium">中等 (16x16、40地雷)</option>
+      <option value="hard">困難 (24x24、99地雷)</option>
+    </select>
+    <button id="reset">🔄</button>
+    <span id="flags">🚩 99</span>
+    <span id="timer">⏳ 000</span>
+    <!-- 新增排行榜按鈕 -->
+    <button id="leaderboard">查看排行榜</button>
+      
+    <!-- 排行榜模態框 -->
+    <div id="leaderboard-modal">
+      <h2 id="leaderboard-header">最速排行榜
+      <select id="leaderboard-select">
+        <option value="easy">簡單</option>
+        <option value="medium">中等</option>
+        <option value="hard">困難</option>
+      </select>
+      </h2>
+      <p id="leaderboard-none">此難度目前沒有人通過</p>
+      <ol id="leaderboard-list">
+      </ol>
+      <button id="close-leaderboard">關閉</button>
+    </div>
+    <button id="help">❓</button>
+    <div id="help-modal">
+      <h2>踩地雷遊戲說明</h2>
+      <p>點擊方塊來揭開該方塊位置是否有地雷，</p>
+      <p>若顯示數字X則表示該方塊位置的九宮格內有X個地雷。</p>
+      <p>遊戲結束條件：將所有非地雷方塊揭開。</p>
+      <br>
+      <p>⏳: 花費時間，點擊第一個方塊後開始計算。</p>
+      <p>🚩: 用來標記地雷，右鍵點擊方塊放置。</p>
+      <p>🔄: 點擊後重新開始新的一局。</p>
+    </div>
+  </header>
+  <div id="game"></div>
+  <div id="message-box">
+    <h2 id="message">點擊方塊開始遊戲</h2>
+  </div>
+  <!-- 新增遊戲規則模態框 -->
+  <div id="rules-modal">
+    <div id="rules-content">
+      <h2>踩地雷遊戲規則</h2>
+      <p>點擊方塊來揭開該方塊位置是否有地雷，</p>
+      <p>若顯示數字X則表示該方塊位置的九宮格內有X個地雷。</p>
+      <p>遊戲結束條件：將所有非地雷方塊揭開。</p>
+      <br>
+      <p>⏳: 花費時間，點擊第一個方塊後開始計算。</p>
+      <p>🚩: 用來標記地雷，右鍵點擊方塊放置。</p>
+      <p>🔄: 點擊後重新開始新的一局。</p>
+      <button id="start-game">遊戲開始</button>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

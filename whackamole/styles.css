@@ -1,0 +1,267 @@
+/* 遊戲背景樣式 */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background-color: rgba(255, 174, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 15px;
+    overflow: auto;
+}
+html, body, input {
+    color: black;
+    font-family: "Gill Sans MT Ext Condensed Bold";
+    text-shadow: #333 1px 1px 1px;
+}
+
+a {
+    color: #333;
+    text-shadow: #666 1px 1px 1px;
+    text-decoration: none;
+    outline: none;
+    font-size: 48px
+}
+a:hover {
+    color: black;
+    text-shadow: #333 1px 1px 1px;
+}
+
+input {
+    color: #333;
+    text-shadow: #666 1px 1px 1px;
+}
+
+
+#home {
+    display: block;
+    flex-direction: column;
+    text-align:center; 
+    position: absolute;
+    width: 800px;
+    height: 600px;
+    margin-top: 150px;
+    background: rgb(43, 209, 51);
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    background-image: url('resource/hammer.png');
+    background-size: cover;
+    background-position: center;
+}
+
+#home h1 {
+    color: rgb(255, 196, 0);
+    font-size: 60px;
+    margin: 50px 0;   
+}
+
+#home label, #home select {
+    font-size: 28px;
+    padding: 5px 0px;
+}
+
+#leaderboard {
+    margin: 100px 0;
+    padding: 10px 20px;
+    font-size: 32px;
+    cursor: pointer;
+    background: rgb(0, 0, 0, 0);
+    color:rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+}
+
+#start {
+    margin: -30px 0;
+    padding: 10px 200px;
+    font-size: 32px;
+    cursor: pointer;
+    background: #000000b0;
+    color:rgb(255, 196, 0, 0.8);
+    border: none;
+    border-radius: 5px;
+}
+
+/* Game Design */
+
+#container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 800px;
+    height: 600px;
+    margin-top: 150px;
+    background: rgba(52, 253, 62, 0.8);
+    border: 5px solid #4caf50;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+}
+
+/* 內部標題區域 */
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 800px;
+    font-size: 30px;
+    color: rgb(5, 134, 255);
+}
+
+#scoreDisplay {
+    margin: 0 0 0 5px;
+    text-align: left;
+}
+
+#timeDisplay {
+    margin: 0 15px;
+    text-align: right;
+}
+
+/* 遊戲區域 */
+#game {
+    margin: 25px 0;
+    display: grid;
+    gap: 50px;
+    width: 800px;
+    height: 540px;
+    grid-template-rows: repeat(3, 120px);
+    grid-template-columns: repeat(3, 120px);
+    justify-content: center;
+    border-radius: 25px;
+    z-index: 9;
+}
+
+
+.hole .mole{
+    width: 70%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    animation: rise .3s ease-out;
+}
+@keyframes rise {
+    0%{
+        transform: translateX(-50%) translateY(100%);
+    }
+    100%{
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.hole {
+    width: 150px;
+    height: 150px;
+    background-color: rgb(165, 85, 0);
+    box-shadow: inset 0 7px 0 7px rgb(53, 21, 6),
+                inset 0 18px 18px 15px rgba(0, 0, 0, 0.3),
+                0 0 5px rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+.mole {
+    width: 200px;
+    height: 200px;
+    top: -20px;
+    position: absolute;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.cursor{
+    margin: -250px -560px;
+    height: 300px;
+    width: 300px;
+    position: absolute;
+    background-image: url('resource/hammer.png');
+    background-size: 100% 100%;
+    transform: translate(-20%, -20%);
+    transition: transform .1s;
+    pointer-events: none;
+}
+.cursor.active{
+    transform: translate(-20%, -20%) rotate(-45deg);
+}
+.hole.active .mole {
+    transform: translate(-50%, -50%);
+}
+#score {
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+#leaderboard-modal {
+    display: none;
+    position: absolute;
+    top: 35%;
+    left: -35%;
+    transform: translateX(-50%);
+    width: 350px;
+    font-size: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #fff200;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: grabbing;
+    z-index: 10;
+}
+
+#leaderboard-header {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 10px;
+    color: #fff200;
+    font-weight: bold;
+    font-size: 36px;
+    text-align: left;
+}
+#leaderboard-select {
+    float: right;
+    color: rgb(0, 0, 0);
+    border: none;
+    background-color: #ffffff7c;
+}
+
+#leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#leaderboard-list li {
+    margin: 5px 0;
+    color: rgba(77, 249, 91, 0.766);
+}
+
+#leaderboard-list li:first-child {
+    margin: 10px 0;
+    font-size: 22px;
+    color: rgb(50, 255, 67);
+    font-weight: bold;
+}
+
+#leaderboard-none{
+    color: rgb(200, 200, 200);
+    display: none;
+}
+
+#close-leaderboard {
+    margin: 20px 0 0 0;
+    font-size: 20px;
+    padding: 5px 10px;
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
