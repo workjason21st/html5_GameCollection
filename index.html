@@ -32,7 +32,7 @@
     window.addEventListener("load", () => {
         "use strict";
         const header = document.querySelector("header");
-        play(location.hash.substring(1) || "bounce");
+        play(location.hash.substring(1) || "minesweeper");
         document.querySelector("#nav").addEventListener("click", (e) => {
             if (e.target.dataset.game) {
                 play(e.target.dataset.game);
