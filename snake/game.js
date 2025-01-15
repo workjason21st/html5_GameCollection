@@ -275,8 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
     scoreDisplay.textContent = `長度: ${score}`;
     timeDisplay.textContent = `時間: ${time}`;
     speed = 400 - (selectedLevel - 1) * 50; 
-    levelDisplay.textContent = `難度: ${selectedLevel === 1 ? '簡單' : selectedLevel === 2 ? '中等' : '困難'}`;
-
+    levelDisplay.textContent = `難度: ${
+      selectedLevel === 1 ? '簡單' : 
+      selectedLevel === 2 ? '中等' : 
+      selectedLevel === 3 ? '困難' : 
+      '地獄'
+    }`;
 
     draw();
     clearInterval(gameInterval);
