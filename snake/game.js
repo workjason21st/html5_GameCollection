@@ -4,19 +4,85 @@ document.addEventListener('DOMContentLoaded', () => {
   const gameBoard = document.getElementById('game');
   const scoreDisplay = document.getElementById('score');
   const timeDisplay = document.getElementById('time');
+  const levelDisplay = document.getElementById('level');
   const difficultyButtons = document.querySelectorAll('a[data-action="play"]');
   const leaderboardButton = document.getElementById('leaderboard');
   const leaderboardModal = document.getElementById('leaderboard-modal');
   const leaderboardNone = document.getElementById('leaderboard-none');
   const closeLeaderboardButton = document.getElementById('close-leaderboard');
   const leaderboardSelect = document.getElementById('leaderboard-select');
+  const helpButton = document.getElementById('help');
+  const helpModal = document.getElementById('help-modal');
+  const closeHelpButton = document.getElementById('close-help');
+ 
+  const dynamicSnake1 = document.getElementById('dynamic_snake1');
+  const dynamicSnake2 = document.getElementById('dynamic_snake2');
+  const title = document.getElementById('snakeTitle');
+  let box = title.getBoundingClientRect();
+  let top = box.top - 140; // 調整蛇的起始位置
+  let left = box.left - 650;
+  let width = box.width - 60;
+  let height = box.height + 40;
+
+  // 定義兩條蛇的狀態
+  let snakes = [
+    { element: dynamicSnake1, position: 0, direction: 0, speed: 0.002 },
+    { element: dynamicSnake2, position: 0.5, direction: 0, speed: 0.002 },
+  ];
+
+  function moveTitleSnakes() {
+    snakes.forEach((snake) => {
+      let { element, position, speed } = snake;
+
+      // 更新位置
+      if (position > 1) position -= 1; // 循環控制 position 在 0~1 之間
+
+      // 計算蛇的位置與方向
+      if (position < 0.25) {
+        // 上邊界
+        position += (speed/4);
+        element.style.top = `${top}px`;
+        element.style.left = `${left + width * (position / 0.25)}px`;
+        snake.direction = 0; // 向右
+      } else if (position < 0.5) {
+        // 右邊界
+        position += speed;
+        element.style.top = `${top + height * ((position - 0.25) / 0.25)}px`;
+        element.style.left = `${left + width}px`;
+        snake.direction = 90; // 向下
+      } else if (position < 0.75) {
+        // 下邊界
+        position += (speed/4);
+        element.style.top = `${top + height}px`;
+        element.style.left = `${left + width * (1 - (position - 0.5) / 0.25)}px`;
+        snake.direction = 180; // 向左
+      } else {
+        // 左邊界
+        position += speed;
+        element.style.top = `${top + height * (1 - (position - 0.75) / 0.25)}px`;
+        element.style.left = `${left}px`;
+        snake.direction = 270; // 向上
+      }
+
+      // 更新蛇的位置和方向
+      snake.position = position;
+      element.style.transform = `rotate(${snake.direction}deg)`;
+    });
+
+    // 持續移動
+    requestAnimationFrame(moveTitleSnakes);
+  }
+
+  // 開始移動
+  moveTitleSnakes();
 
   const STORAGE_KEY = 'snakeLeaderboard';
-  const boardSize = 12;
+  const boardSize = 15;
   const initialSnake = [{ x: 6, y: 6 }];
-  const initialDirection = { x: 0, y: -1 };
+  const initialDirection = { x: 1, y: 0 };
   let snake = [...initialSnake];
   let direction = { ...initialDirection };
+  let turnFlags = [];
   let food = generateFood();
   let currentLevel = 1;
   let score = 0;
@@ -83,8 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function createBoard() {
-    gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, 48px)`;
-    gameBoard.style.gridTemplateRows = `repeat(${boardSize}, 48px)`;
+    gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, 40px)`;
+    gameBoard.style.gridTemplateRows = `repeat(${boardSize}, 40px)`;
     for (let i = 0; i < boardSize * boardSize; i++) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
@@ -93,17 +159,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function draw() {
+    // 清除單元格狀態
     const cells = document.querySelectorAll('.cell');
-    cells.forEach(cell => cell.classList.remove('snake', 'food'));
-
-    snake.forEach(segment => {
-      const index = segment.y * boardSize + segment.x;
-      cells[index].classList.add('snake');
+    cells.forEach(cell => {
+      cell.classList.remove('snake', 'snake-head', 'snake-body', 'food'); 
+      cell.style.backgroundImage = '';
+      cell.style.transform = '';
     });
+    // 繪製蛇
+    snake.forEach((segment, index) => {
+      const cellIndex = segment.y * boardSize + segment.x;
+      const cell = cells[cellIndex];
+      const isHead = index === 0;
+      const isTail = index === snake.length - 1;
+      const isEvenLength = snake.length % 2 === 0;
+      cell.classList.add('snake');
 
+      // 不同節段的處理
+      if (isHead) {
+        cell.classList.add('snake-head');
+        const Angle = getRotationAngle(direction);
+        // 特別處理180度旋轉的情況
+        if (Angle !== 180) {
+          cell.style.transform = `rotate(${Angle}deg)`;
+        } else {
+          cell.style.transform = 'scaleX(-1)';
+        }
+      } 
+      else {
+        cell.classList.add('snake-body');
+      }
+    });
+  
+    // 繪製食物
     const foodIndex = food.y * boardSize + food.x;
-    cells[foodIndex].classList.add('food');
+    const foodCell = cells[foodIndex];
+    foodCell.classList.add('food');
   }
+
+  // 獲取旋轉角度
+  function getRotationAngle(direction) {
+    if (direction.x === 1 && direction.y === 0) return 0; // 右
+    if (direction.x === 0 && direction.y === 1) return 90; // 下
+    if (direction.x === -1 && direction.y === 0) return 180; // 左
+    if (direction.x === 0 && direction.y === -1) return 270; // 上
+    return 0;
+  }
+
 
   function moveSnake() {
     const head = {
@@ -166,12 +268,16 @@ document.addEventListener('DOMContentLoaded', () => {
     containerDisplay.style.display = 'block';
     snake = [...initialSnake];
     direction = { ...initialDirection };
+    turnFlags = [];
     food = generateFood();
     score = 0;
     time = 0;
     scoreDisplay.textContent = `長度: ${score}`;
     timeDisplay.textContent = `時間: ${time}`;
-    speed = 400 - (selectedLevel - 1) * 50; // Adjust speed based on level
+    speed = 400 - (selectedLevel - 1) * 50; 
+    levelDisplay.textContent = `難度: ${selectedLevel === 1 ? '簡單' : selectedLevel === 2 ? '中等' : '困難'}`;
+
+
     draw();
     clearInterval(gameInterval);
     gameInterval = setInterval(moveSnake, speed);
@@ -220,7 +326,39 @@ document.addEventListener('DOMContentLoaded', () => {
   closeLeaderboardButton.addEventListener('click', () => {
     leaderboardModal.style.display = 'none';
   });
+  helpButton.addEventListener('click', () => {
+    helpModal.style.display = 'block';
+  });
+  closeHelpButton.addEventListener('click', () => {
+    helpModal.style.display = 'none';
+  });
   
+  // 使視窗可拖曳
+  helpModal.addEventListener('mousedown', function(e) {
+    let offsetX = e.clientX - helpModal.offsetLeft;
+    let offsetY = e.clientY - helpModal.offsetTop;
+
+    function moveAt(pageX, pageY) {
+      helpModal.style.left = `${pageX - offsetX}px`;
+      helpModal.style.top = `${pageY - offsetY}px`;
+    }
+
+    function onMouseMove(e) {
+      moveAt(e.pageX, e.pageY);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
+  helpModal.ondragstart = function() {
+    return false;
+  };
   // 使排行榜視窗可拖曳
   leaderboardModal.addEventListener('mousedown', function(e) {
     let offsetX = e.clientX - leaderboardModal.offsetLeft;

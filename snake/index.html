@@ -9,7 +9,9 @@
 </head>
 <body>
   <div id="home" class="homeScreen">
-    <h1>貪食蛇</h1>
+    <h1 id="snakeTitle">貪食蛇</h1>
+    <img class="dynamic_snake" id="dynamic_snake1" src="./resource/dynamic_snake.png" alt="蛇">
+    <img class="dynamic_snake" id="dynamic_snake2" src="./resource/dynamic_snake.png" alt="蛇蛇">
     <ul>
         <li><a href="#" data-action="play" data-level="1">簡單</a></li>
         <li><a href="#" data-action="play" data-level="2">普通</a></li>
@@ -17,21 +19,9 @@
         <li><a href="#" data-action="play" data-level="4">地獄</a></li>
     </ul>
     <br>
+    <button id="help">遊玩方式</button>
+    <br>
     <button id="leaderboard">查看排行榜</button>
-    <div id="leaderboard-modal">
-      <h2 id="leaderboard-header">長度排行榜
-      <select id="leaderboard-select">
-        <option value="1">簡單</option>
-        <option value="2">普通</option>
-        <option value="3">困難</option>
-        <option value="4">地獄</option>
-      </select>
-      </h2>
-      <p id="leaderboard-none">目前沒有紀錄</p>
-      <ol id="leaderboard-list">
-      </ol>
-      <button id="close-leaderboard">關閉</button>
-    </div>
   </div>
   <div id="container" class="gameScreen">
     <header id="header">
@@ -41,6 +31,35 @@
     </header>
     <div id="game">
     </div>
+  </div>
+  <!-- 新增遊戲規則模態框 -->
+  <div id="help-modal">
+    <div id="help-content">
+      <h2>貪食蛇遊玩方式</h2>
+      <p>使用鍵盤方向鍵控制貪食蛇的移動方向，</p>
+      <p>遊戲內有，</p>
+      <p>當蛇撞上藍色邊界牆或是自己的身體就會結束，</p>
+      <p>努力取得最高的分數進入排行榜吧。</p>
+      <br>
+      <p>⏳: 花費時間，點擊第一個方塊後開始計算。</p>
+      <p>🚩: 用來標記地雷，右鍵點擊方塊放置。</p>
+      <p>🔄: 點擊後重新開始新的一局。</p>
+      <button id="close-help">關閉</button>
+    </div>
+  </div>
+  <div id="leaderboard-modal">
+    <h2 id="leaderboard-header">長度排行榜
+    <select id="leaderboard-select">
+      <option value="1">簡單</option>
+      <option value="2">普通</option>
+      <option value="3">困難</option>
+      <option value="4">地獄</option>
+    </select>
+    </h2>
+    <p id="leaderboard-none">目前沒有紀錄</p>
+    <ol id="leaderboard-list">
+    </ol>
+    <button id="close-leaderboard">關閉</button>
   </div>
 </body>
 </html>

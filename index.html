@@ -9,8 +9,8 @@
 <body>
   <header>
       <h1 id="title">踩地雷</h1>
-      <p id="expand">Touch to show more games.</p>
-      <p id="select">Click on the game you want to play</p>
+      <p id="expand">觸碰查看更多小遊戲.</p>
+      <p id="select">點擊遊戲後遊玩</p>
       <ul id="nav">
         <li><a href="#minesweeper" data-game="minesweeper" class="selected">踩地雷</a></li>
           <li><a href="#whackamole" data-game="whackamole">打地鼠</a></li>
@@ -32,7 +32,7 @@
     window.addEventListener("load", () => {
         "use strict";
         const header = document.querySelector("header");
-        play(location.hash.substring(1) || "bounce");
+        play(location.hash.substring(1) || "minesweeper");
         document.querySelector("#nav").addEventListener("click", (e) => {
             if (e.target.dataset.game) {
                 play(e.target.dataset.game);

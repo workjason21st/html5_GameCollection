@@ -68,8 +68,19 @@ input {
     list-style: none;
 }
 
+#help {
+    margin-top: 300px;
+    padding: 10px 20px;
+    font-size: 32px;
+    cursor: pointer;
+    background: rgb(0, 0, 0, 0);
+    color:rgba(210, 210, 210);
+    border: none;
+    border-radius: 5px;
+}
+
 #leaderboard {
-    margin: 400px 0;
+    margin-top: 0px;
     padding: 10px 20px;
     font-size: 32px;
     cursor: pointer;
@@ -90,6 +101,14 @@ input {
     border-radius: 5px;
 }
 
+.dynamic_snake {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    border-radius: 50%;
+    z-index: 20;
+}
 /* Game Design */
 
 #container {
@@ -127,29 +146,73 @@ input {
 #game {
     display: grid;
     margin-top: 35px;
-    gap: 2px;
     width: 600px;
     height: 600px;
     border-top:  3px dashed #4c99af;
     z-index: 9;
 }
 
-.cell {
-    border-radius: 25px; /* 調整邊框 */
-}
 .snake {
-    background-color: green; /* 調整蛇的顏色 */
+    background-size: cover;
 }
 
+.snake-head {
+    background-image: url('resource/snakehead.png');
+    background-size: cover;
+}
+
+.snake-body {
+    background-color: rgb(187, 216, 10);
+    background-size: cover;
+}
+
+
 .food {
-    background-color: red; /* 調整食物的顏色 */
+    border-radius: 10px;
+    background-color: red;
+    background-image: url('resource/food.png');
+    background-size: cover;
+}
+
+/* 幫助模態框樣式 */
+#help-modal {
+    display: none;
+    position: absolute;
+    top: 20%;
+    right: 60%;
+    transform: translateX(-50%);
+    width: 450px;
+    text-align:left;
+    color: rgb(50, 50, 50);
+    background: rgba(0, 183, 255, 0.7);
+    border: 2px solid #4c99afd8;
+    border-radius: 10px;
+    text-shadow: none;  
+    z-index: 16;
+}
+#help-modal h2 {
+    font-size: 24px;
+}
+#help-modal p {
+    font-size: 20px;
+}
+
+#close-help {
+    margin: 10px 0 0 200px;
+    font-size: 20px;
+    padding: 5px 10px;
+    background: rgba(225, 225, 225, 0.7);
+    color: rgb(0, 98, 255);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #leaderboard-modal {
     display: none;
     position: absolute;
     top: 20%;
-    left: 150%;
+    left: 85%;
     transform: translateX(-50%);
     width: 400px;
     font-size: 20px;
