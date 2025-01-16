@@ -1,4 +1,6 @@
-/* 遊戲背景樣式 */
+/* 
+遊戲背景設定
+ */
 html, body {
     width: 100%;
     height: 100%;
@@ -36,7 +38,9 @@ input {
     text-shadow: #666 1px 1px 1px;
 }
 
-
+/* 
+遊戲首頁設定
+*/
 #home {
     display: block;
     flex-direction: column;
@@ -50,13 +54,11 @@ input {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     z-index: 10;
 }
-
 #home h1 {
     color: rgba(255, 41, 41);
     font-size: 60px;
     margin: 50px 0;   
 }
-
 #home ul {
     position: absolute;
     top: 250px;
@@ -68,6 +70,9 @@ input {
     list-style: none;
 }
 
+/*
+首頁按鈕樣式
+*/
 #help {
     margin-top: 300px;
     padding: 10px 20px;
@@ -78,7 +83,6 @@ input {
     border: none;
     border-radius: 5px;
 }
-
 #leaderboard {
     margin-top: 0px;
     padding: 10px 20px;
@@ -90,17 +94,7 @@ input {
     border-radius: 5px;
 }
 
-#start {
-    margin: -30px 0;
-    padding: 10px 200px;
-    font-size: 32px;
-    cursor: pointer;
-    background: #000000b0;
-    color:rgb(255, 196, 0, 0.8);
-    border: none;
-    border-radius: 5px;
-}
-
+/*動態蛇樣式*/
 .dynamic_snake {
     position: absolute;
     width: 40px;
@@ -109,8 +103,10 @@ input {
     border-radius: 50%;
     z-index: 20;
 }
-/* Game Design */
 
+/* 
+遊戲容器設定 
+*/
 #container {
     display: none;
     flex-direction: column;
@@ -136,13 +132,14 @@ input {
     font-size: 40px;
     color: rgba(255, 41, 41);
 }
-
 #header div {
-    flex: 1; /* 使每個子元素平分可用空間 */
-    text-align: center; /* 使文本居中 */
+    flex: 1;
+    text-align: center;
 }
 
-/* 遊戲區域 */
+/* 
+遊戲主體區域 
+*/
 #game {
     display: grid;
     margin-top: 35px;
@@ -151,22 +148,20 @@ input {
     border-top:  3px dashed #4c99af;
     z-index: 9;
 }
-
+/* 蛇的樣式 */
 .snake {
     background-size: cover;
 }
-
 .snake-head {
     background-image: url('resource/snakehead.png');
     background-size: cover;
 }
-
 .snake-body {
     background-color: rgb(187, 216, 10);
     background-size: cover;
 }
 
-
+/* 食物樣式 */
 .food {
     border-radius: 10px;
     background-color: red;
@@ -174,7 +169,9 @@ input {
     background-size: cover;
 }
 
-/* 幫助模態框樣式 */
+/* 
+幫助視窗樣式 
+*/
 #help-modal {
     display: none;
     position: absolute;
@@ -190,13 +187,15 @@ input {
     text-shadow: none;  
     z-index: 16;
 }
+/* 幫助視窗標題 */
 #help-modal h2 {
     font-size: 24px;
 }
+/* 幫助視窗內容 */
 #help-modal p {
     font-size: 20px;
 }
-
+/* 關閉按鈕 */
 #close-help {
     margin: 10px 0 0 200px;
     font-size: 20px;
@@ -208,6 +207,9 @@ input {
     cursor: pointer;
 }
 
+/* 
+排行榜視窗樣式 
+*/
 #leaderboard-modal {
     display: none;
     position: absolute;
@@ -225,7 +227,7 @@ input {
     cursor: grabbing;
     z-index: 15;
 }
-
+/* 排行榜標題 */
 #leaderboard-header {
     list-style: none;
     padding: 0;
@@ -234,6 +236,7 @@ input {
     font-weight: bold;
     font-size: 36px;
 }
+/* 排行榜難度選擇 */
 #leaderboard-select {
     text-align: right;
     font-size: 30px;
@@ -242,30 +245,30 @@ input {
     border: none;
     background-color: #ffffff7c;
 }
-
+/* 排行榜列表 */    
 #leaderboard-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
+/* 排行榜列表項目 */    
 #leaderboard-list li {
     margin: 5px 0;
     color: rgba(255, 132, 50, 0.8);;
 }
-
+/* 排行榜列表項目(第一名) */
 #leaderboard-list li:first-child {
     margin: 10px 0;
     font-size: 22px;
     color: rgb(255, 114, 20);
     font-weight: bold;
 }
-
+/* 排行榜列表項目(無資料) */
 #leaderboard-none{
     color: gray;
     display: none;
 }
-
+/* 關閉排行榜按鈕 */
 #close-leaderboard {
     margin: 10px 0 0 320px;
     font-size: 20px;

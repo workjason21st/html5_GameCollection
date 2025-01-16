@@ -7,19 +7,23 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 網站頁面總標題 -->
   <header>
+      <!-- 預設遊戲名稱 -->
       <h1 id="title">踩地雷</h1>
       <p id="expand">觸碰查看更多小遊戲.</p>
       <p id="select">點擊遊戲後遊玩</p>
+      <!-- 遊戲列表 -->
       <ul id="nav">
         <li><a href="#minesweeper" data-game="minesweeper" class="selected">踩地雷</a></li>
           <li><a href="#whackamole" data-game="whackamole">打地鼠</a></li>
           <li><a href="#snake" data-game="snake">貪食蛇</a></li>
       </ul>
   </header>
+  <!-- 遊戲執行區 -->
   <iframe id="machine"></iframe>
-  
   <script>
+    // 遊戲選擇
     function play(game) {
         "use strict";
         document.querySelector("#nav li a.selected").className = "";
@@ -28,7 +32,7 @@
         document.getElementById("machine").src = `${game}/index.html`;
         document.title = "HTML5 Games: " + game.substring(0, 1).toUpperCase() + game.substring(1);
     }
-
+    // 遊戲載入
     window.addEventListener("load", () => {
         "use strict";
         const header = document.querySelector("header");

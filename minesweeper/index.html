@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>踩地雷</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
   <script src="./game.js"></script>
 </head>
 <body>
   <div id="container" class="gameScreen">
   <header id="header">
+    <!-- 遊戲難度選擇 -->
     <select id="difficulty">
       <option value="easy">簡單 (8x8、10地雷)</option>
       <option value="medium">中等 (16x16、40地雷)</option>
@@ -18,10 +19,8 @@
     <button id="reset">🔄</button>
     <span id="flags">🚩 99</span>
     <span id="timer">⏳ 000</span>
-    <!-- 新增排行榜按鈕 -->
+    <!-- 排行榜相關 -->
     <button id="leaderboard">查看排行榜</button>
-      
-    <!-- 排行榜模態框 -->
     <div id="leaderboard-modal">
       <h2 id="leaderboard-header">最速排行榜
       <select id="leaderboard-select">
@@ -35,6 +34,7 @@
       </ol>
       <button id="close-leaderboard">關閉</button>
     </div>
+    <!-- 說明相關 -->
     <button id="help">❓</button>
     <div id="help-modal">
       <h2>踩地雷遊戲說明</h2>
@@ -51,7 +51,7 @@
   <div id="message-box">
     <h2 id="message">點擊方塊開始遊戲</h2>
   </div>
-  <!-- 新增遊戲規則模態框 -->
+  <!-- 遊戲規則相關 -->
   <div id="rules-modal">
     <div id="rules-content">
       <h2>踩地雷遊戲規則</h2>

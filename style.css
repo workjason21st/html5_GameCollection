@@ -1,6 +1,6 @@
-/**
- * Main Styles
- */
+/* 
+網站頁面主設計 
+*/
  html {
     background: radial-gradient(black 15%, transparent 0%) 0px 0px,
                 radial-gradient(black 15%, transparent 0%) 0px 24px,
@@ -14,7 +14,7 @@
     background-size: 12px 12px;
     height: 100%;
 }
-
+/* 網站頁面主體 */
 body {
     position: relative;
     height: 100%;
@@ -22,6 +22,10 @@ body {
     font: 12px/18px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     background-image: radial-gradient(100% 70%, transparent, rgba(255, 255, 255, 0.100));
 }
+
+/* 
+網站頁面總標題 
+*/
 header {
     position: absolute;
     box-sizing: border-box;
@@ -36,21 +40,6 @@ header {
     border-left: 10px inset rgb(255, 255, 0);
     transition: all 0.5s;
 }
-header:hover {
-    height: 80px;
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    margin-bottom: -5px;
-}
-
-
-/**
- * Header Styles
- */
 header h1 {
     display: inline-block;
     margin: 0;
@@ -69,24 +58,32 @@ header p {
     font-style: italic;
     transition: opacity 0.5s;
 }
-#select {
-    position: relative;
-    left: -100px;
-    opacity: 0;
+header:hover {
+    height: 80px;
 }
-
 header:hover #expand {
     opacity: 0;
 }
 header:hover #select {
     opacity: 1;
 }
+#select {
+    position: relative;
+    left: -100px;
+    opacity: 0;
+}
 
+/* 遊戲執行區 */
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin-bottom: -5px;
+}
 
-
-/**
- * Nav Menu Styles
- */
+/* 
+遊戲列表 
+*/
 #nav {
     list-style: none;
     margin: 5px;

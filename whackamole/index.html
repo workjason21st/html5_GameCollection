@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>打地鼠</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./style.css">
   <script src="./game.js"></script>
 </head>
 <body>
+  <!-- 首頁 -->
   <div id="home" class="homeScreen">
+    <!-- 遊戲標題 -->
     <h1>打地鼠</h1>
     <label for="time">遊戲時長:</label>
     <select id="time">
@@ -17,6 +19,19 @@
       <option value="90">90秒</option>
     </select>
     <br>
+    <!-- 遊戲規則相關 -->
+    <button id="help">遊戲玩法</button>
+    <div id="help-modal">
+      <div id="help-content">
+        <h2>打地鼠遊玩方式</h2>
+        <p>使用滑鼠控制槌子移動，</p>
+        <p>當點擊地鼠時就能加分，</p>
+        <p>在遊戲時間內獲得最高分吧！</p>
+        <br>
+        <button id="close-help">關閉</button>
+      </div>
+    </div>
+    <!-- 排行榜相關 -->
     <button id="leaderboard">查看排行榜</button>
     <div id="leaderboard-modal">
       <h2 id="leaderboard-header">積分排行榜
@@ -34,12 +49,15 @@
     <br>
     <button id="start">開始遊戲</button>
   </div>
+  <!-- 遊戲主體 -->
   <div id="container" class="gameScreen">
+    <!-- 遊戲資訊顯示 -->
     <header id="header">
       <div id="scoreDisplay">分數: 0</div>
       <div id="timeDisplay">時間: 60</div>
     </header>
     <div id="game">
+      <!-- 地洞 -->
       <div class="hole"></div>
       <div class="hole"></div>
       <div class="hole"></div>
@@ -50,6 +68,7 @@
       <div class="hole"></div>
       <div class="hole"></div>
     </div>
+    <!-- 滑鼠 -->
     <div class="cursor"></div>
   </div>
 </body>

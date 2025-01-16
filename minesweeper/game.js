@@ -1,4 +1,4 @@
-// 遊戲設定
+/* 遊戲設定 */
 const GAME_CONFIG = {
   easy: { size: 8, mines: 10, cellSize: 86 },
   medium: { size: 16, mines: 40, cellSize: 42 },
@@ -10,7 +10,7 @@ const MESSAGE_DURATION = 3000;
 const MAX_PLAYER_NAME_LENGTH = 20;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // DOM 元素
+  /* DOM 元素 */
   const elements = {
     container: document.getElementById('container'),
     game: document.getElementById('game'),
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startGameButton: document.getElementById('start-game')
   };
 
-  // 遊戲狀態
+  /* 遊戲狀態 */
   const gameState = {
     board: [],
     flagsLeft: 0,
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     firstClick: true
   };
 
-  // 方向陣列，用於檢查周圍格子
+  /* 方向陣列，用於檢查周圍格子 */
   const directions = [
     [-1, -1], [-1, 0], [-1, 1],
     [0, -1],         [0, 1],
@@ -51,8 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const cheatKeys = new Set(['2', '4', '6', '8']);
   let pressedKeys = new Set();
 
-  // 初始化排行榜
+  /* 初始化排行榜 */
   const leaderboard = {
+    // 載入排行榜 
     load(difficulty) {
       try {
         console.log('leaderboard load',difficulty);
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return [];
       }
     },
-
+    // 儲存排行榜 
     save(playerName, time, difficulty) {
       try {
         console.log('leaderboard save',difficulty);
@@ -89,14 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('儲存排行榜時發生錯誤');
       }
     },
-
+    // 匿名設定
     sanitizePlayerName(name) {
       return (name || '匿名')
         .slice(0, MAX_PLAYER_NAME_LENGTH)
         .replace(/[<>]/g, '')
         .trim() || '匿名';
     },
-
+    // 顯示排行榜
     display(difficulty) {
       const entries = leaderboard.load(difficulty);
       const list = document.getElementById('leaderboard-list');
@@ -116,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       elements.leaderboardModal.style.display = 'block';
     },
-    
+    // 清理排行榜
     clear() {
       try {
         localStorage.removeItem(STORAGE_KEY);
@@ -129,13 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // 遊戲核心功能
+  /* 遊戲核心功能 */
   function initGame() {
     cleanupGame();
-    
+    // 遊戲設定
     const config = GAME_CONFIG[elements.difficultySelect.value];
     const { size, mines, cellSize } = config;
-
+    // 遊戲狀態
     Object.assign(gameState, {
       flagsLeft: mines,
       timeElapsed: 0,
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gameOver: false,
       firstClick: true
     });
-
+    
     updateDisplays();
     setupGameBoard(size, cellSize);
     gameState.board = generateBoard(size);
@@ -151,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.leaderboardSelect.value = elements.difficultySelect.value;
     adjustScale();
   }
-
+  /* 清理遊戲 */
   function cleanupGame() {
     elements.messageBox.style.display = 'none';
     if (gameState.timer) {
@@ -160,12 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     elements.game.innerHTML = '';
   }
-
+  /* 遊戲設定 */
   function setupGameBoard(size, cellSize) {
     elements.game.style.gridTemplateColumns = `repeat(${size}, ${cellSize}px)`;
     elements.game.style.gridTemplateRows = `repeat(${size}, ${cellSize}px)`;
   }
-
+  /* 生成遊戲場地 */
   function generateBoard(size) {
     return Array.from({ length: size }, () =>
       Array.from({ length: size }, () => ({
@@ -176,13 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }))
     );
   }
-
+  /* 放置地雷 */
   function placeMines(x, y) {
     const config = GAME_CONFIG[elements.difficultySelect.value];
     const { size, mines } = config;
     let placedMines = 0;
     
-    // 確保第一次點擊的位置及其周圍不會有地雷
+    // 確保第一次點擊的位置及其周圍不會有地雷 
     const safeZone = new Set();
     directions.forEach(([dx, dy]) => {
       const nx = x + dx;
@@ -192,11 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     safeZone.add(`${x},${y}`);
-
+    // 放置地雷
     while (placedMines < mines) {
       const mx = Math.floor(Math.random() * size);
       const my = Math.floor(Math.random() * size);
-      
+      // 確保地雷不會放置在已經放置過的地雷周圍 
       if (!gameState.board[mx][my].mine && !safeZone.has(`${mx},${my}`)) {
         gameState.board[mx][my].mine = true;
         placedMines++;
@@ -212,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
-
+  /* 計算每個格子周圍的地雷數 */
   function countAdjacentMines(x, y) {
     const config = GAME_CONFIG[elements.difficultySelect.value];
     return directions.reduce((count, [dx, dy]) => {
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return count;
     }, 0);
   }
-
+  /* 渲染遊戲場地 */
   function renderBoard() {
     elements.game.innerHTML = '';
     const config = GAME_CONFIG[elements.difficultySelect.value];
@@ -236,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
+  /* 創建遊戲格子 */
   function createCellElement(cell, x, y) {
     const element = document.createElement('div');
     element.classList.add('cell');
@@ -265,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return element;
   }
-
+  /* 點擊格子 */
   function handleCellClick(x, y) {
     if (gameState.gameOver) {
       showMessage('請點擊重置按鈕開始新的一局！');
@@ -282,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     revealCell(x, y);
   }
-
+  /* 第一次點擊 */
   function handleFirstClick(x, y) {
     placeMines(x, y);
     gameState.firstClick = false;
@@ -290,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startTimer();
     revealCell(x, y);
   }
-
+  /* 揭露格子 */
   function revealCell(x, y) {
     const cell = gameState.board[x][y];
     if (cell.revealed || cell.flagged) return;
@@ -308,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBoard();
     checkWinCondition();
   }
-
+  /* 揭露周圍格子 */
   function revealAdjacentCells(x, y) {
     const config = GAME_CONFIG[elements.difficultySelect.value];
     
@@ -322,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
+  /* 旗子 */
   function toggleFlag(x, y) {
     const cell = gameState.board[x][y];
     if (cell.revealed) return;
@@ -338,14 +339,14 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplays();
     renderBoard();
   }
-
+  /* 遊戲結束 */
   function gameOver() {
     revealAllMines();
     showMessage('遊戲結束！', 5000);
     stopTimer();
     gameState.gameOver = true;
   }
-
+  /* 揭露所有地雷 */
   function revealAllMines() {
     gameState.board.forEach(row => {
       row.forEach(cell => {
@@ -354,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     renderBoard();
   }
-
+  /* 檢查勝利條件 */
   function checkWinCondition() {
     const config = GAME_CONFIG[elements.difficultySelect.value];
     let revealedCount = 0;
@@ -369,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
       handleWin();
     }
   }
-
+  /* 勝利 */
   function handleWin() {
     stopTimer();
     revealAllMines();
@@ -381,8 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     leaderboard.display(difficulty);
     showMessage('你的紀錄已儲存到排行榜！', 5000);
   }
-
-  // 計時器相關函數
+  /* 計時器相關函數 */
   function startTimer() {
     if (gameState.timer) return;
     
@@ -391,20 +391,19 @@ document.addEventListener('DOMContentLoaded', () => {
       updateDisplays();
     }, 1000);
   }
-
+  /* 停止計時器 */
   function stopTimer() {
     if (gameState.timer) {
       clearInterval(gameState.timer);
       gameState.timer = null;
     }
   }
-
-  // 顯示更新函數
+  /* 顯示更新函數 */
   function updateDisplays() {
     elements.timerDisplay.textContent = `⏳ ${gameState.timeElapsed}`;
     elements.flagsDisplay.textContent = `🚩 ${gameState.flagsLeft}`;
   }
-
+  /* 顯示訊息 */
   function showMessage(message, duration = MESSAGE_DURATION) {
     elements.messageBox.textContent = message;
     elements.messageBox.style.display = 'block';
@@ -417,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.messageBox.style.display = 'none';
     }, duration);
   }
-
+  /* 調整遊戲板大小 */
   function adjustScale() {
     if (!elements.game.scrollWidth || !elements.game.scrollHeight) return;
     
@@ -427,8 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     elements.game.style.transform = `scale(${scale})`;
   }
-
-  // 使排行榜視窗可拖曳
+  /* 使排行榜視窗可拖曳 */
   elements.leaderboardModal.addEventListener('mousedown', function(e) {
     let offsetX = e.clientX - elements.leaderboardModal.offsetLeft;
     let offsetY = e.clientY - elements.leaderboardModal.offsetTop;
@@ -454,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   };
 
-  // 監聽鍵盤事件
+  /* 鍵盤事件觸發 */
   document.addEventListener('keydown', (e) => {
     pressedKeys.add(e.key);
     if (cheatKeys.size === pressedKeys.size && [...cheatKeys].every(key => pressedKeys.has(key))) {
@@ -465,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keyup', (e) => {
     pressedKeys.delete(e.key);
   });
-
+  /* 揭露空格子 */
   function revealEmptyCells() {
     gameState.board.forEach((row, x) => {
       row.forEach((cell, y) => {
@@ -478,10 +476,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 初始化遊戲
   initGame();
 
-  // 按鈕相關點擊事件
+  /* 按鈕相關點擊事件 */
   elements.startGameButton.addEventListener('click', () => {
     elements.rulesModal.style.display = 'none';
   });
@@ -495,7 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
   elements.closeLeaderboardButton.addEventListener('click', () => {
     elements.leaderboardModal.style.display = 'none';
   });
-
+  // 選擇難度
   elements.difficultySelect.addEventListener('change', () => {
     initGame();
     elements.leaderboardSelect.value = elements.difficultySelect.value;

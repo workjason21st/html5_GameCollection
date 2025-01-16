@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  /* DOM元素 */
   const homeDisplay = document.getElementById('home');
   const containerDisplay = document.getElementById('container');
   const gameBoard = document.getElementById('game');
@@ -14,16 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const helpButton = document.getElementById('help');
   const helpModal = document.getElementById('help-modal');
   const closeHelpButton = document.getElementById('close-help');
- 
+
+  /* 標題動態蛇 */
   const dynamicSnake1 = document.getElementById('dynamic_snake1');
   const dynamicSnake2 = document.getElementById('dynamic_snake2');
-  const title = document.getElementById('snakeTitle');
-  let box = title.getBoundingClientRect();
-  let top = box.top - 140; // 調整蛇的起始位置
-  let left = box.left - 650;
-  let width = box.width - 60;
-  let height = box.height + 40;
-
+  const top = 0;
+  const left = 0;
+  const width = 560;
+  const height = 150;
   // 定義兩條蛇的狀態
   let snakes = [
     { element: dynamicSnake1, position: 0, direction: 0, speed: 0.002 },
@@ -35,54 +34,55 @@ document.addEventListener('DOMContentLoaded', () => {
       let { element, position, speed } = snake;
 
       // 更新位置
-      if (position > 1) position -= 1; // 循環控制 position 在 0~1 之間
+      if (position > 1) position -= 1;
 
-      // 計算蛇的位置與方向
+      // 移動並計算蛇的位置與方向
       if (position < 0.25) {
         // 上邊界
         position += (speed/4);
         element.style.top = `${top}px`;
         element.style.left = `${left + width * (position / 0.25)}px`;
-        snake.direction = 0; // 向右
+        snake.direction = 0;
       } else if (position < 0.5) {
         // 右邊界
         position += speed;
         element.style.top = `${top + height * ((position - 0.25) / 0.25)}px`;
         element.style.left = `${left + width}px`;
-        snake.direction = 90; // 向下
+        snake.direction = 90;
       } else if (position < 0.75) {
         // 下邊界
         position += (speed/4);
         element.style.top = `${top + height}px`;
         element.style.left = `${left + width * (1 - (position - 0.5) / 0.25)}px`;
-        snake.direction = 180; // 向左
+        snake.direction = 180;
       } else {
         // 左邊界
         position += speed;
         element.style.top = `${top + height * (1 - (position - 0.75) / 0.25)}px`;
         element.style.left = `${left}px`;
-        snake.direction = 270; // 向上
+        snake.direction = 270;
       }
 
       // 更新蛇的位置和方向
       snake.position = position;
       element.style.transform = `rotate(${snake.direction}deg)`;
     });
-
+    
     // 持續移動
     requestAnimationFrame(moveTitleSnakes);
   }
-
   // 開始移動
   moveTitleSnakes();
 
+  /* 
+  遊戲主體 
+  */
   const STORAGE_KEY = 'snakeLeaderboard';
   const boardSize = 15;
   const initialSnake = [{ x: 6, y: 6 }];
   const initialDirection = { x: 1, y: 0 };
   let snake = [...initialSnake];
   let direction = { ...initialDirection };
-  let turnFlags = [];
   let food = generateFood();
   let currentLevel = 1;
   let score = 0;
@@ -91,8 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let timeInterval;
   let speed = 200;
 
-  // 初始化排行榜
+  /* 初始化排行榜 */
   const leaderboard = {
+    // 載入排行榜
     load(level) {
       try {
         const data = localStorage.getItem(STORAGE_KEY);
@@ -103,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return [];
       }
     },
+    // 儲存排行榜
     save(playerName, score, level, time) {
       try {
         console.log('leaderboard save',level);
@@ -124,12 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('儲存排行榜時發生錯誤');
       }
     },
+    // 匿名設定
     sanitizePlayerName(name) {
       return (name || '匿名')
         .slice(0, 30)
         .replace(/[<>]/g, '')
         .trim() || '匿名';
     },
+    // 顯示排行榜
     display(level) {
       const entries = leaderboard.load(level);
       const list = document.getElementById('leaderboard-list');
@@ -148,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  /* 創建遊戲場地 */
   function createBoard() {
     gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, 40px)`;
     gameBoard.style.gridTemplateRows = `repeat(${boardSize}, 40px)`;
@@ -158,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  /* 繪製遊戲場地 */
   function draw() {
     // 清除單元格狀態
     const cells = document.querySelectorAll('.cell');
@@ -179,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isHead) {
         cell.classList.add('snake-head');
         const Angle = getRotationAngle(direction);
-        // 特別處理180度旋轉的情況
         if (Angle !== 180) {
           cell.style.transform = `rotate(${Angle}deg)`;
         } else {
@@ -197,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     foodCell.classList.add('food');
   }
 
-  // 獲取旋轉角度
+  /* 獲取旋轉角度 */
   function getRotationAngle(direction) {
     if (direction.x === 1 && direction.y === 0) return 0; // 右
     if (direction.x === 0 && direction.y === 1) return 90; // 下
@@ -207,12 +212,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+  /* 移動蛇 */
   function moveSnake() {
+    // 獲取蛇頭位置
     const head = {
       x: snake[0].x + direction.x,
       y: snake[0].y + direction.y,
     };
-
+    
+    // 檢查蛇頭是否超出邊界或撞到自己
     if (
       head.x < 0 || head.x >= boardSize ||
       head.y < 0 || head.y >= boardSize ||
@@ -223,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     snake.unshift(head);
-
+    // 如果蛇頭吃到食物
     if (head.x === food.x && head.y === food.y) {
       score += 1;
       scoreDisplay.textContent = `長度: ${score}`;
@@ -234,10 +242,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       snake.pop();
     }
-
+    // 繪製遊戲場地
     draw();
   }
 
+  /* 生成食物 */
   function generateFood() {
     let newFood;
     do {
@@ -249,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return newFood;
   }
 
+  /* 處理方向改變 */
   function handleDirectionChange(event) {
     const { key } = event;
     if (key === 'ArrowUp' && direction.y === 0) {
@@ -261,14 +271,14 @@ document.addEventListener('DOMContentLoaded', () => {
       direction = { x: 1, y: 0 };
     }
   }
-
+  
+  /* 開始遊戲 */
   function startGame(selectedLevel) {
     currentLevel = selectedLevel;
     homeDisplay.style.display = 'none';
     containerDisplay.style.display = 'block';
     snake = [...initialSnake];
     direction = { ...initialDirection };
-    turnFlags = [];
     food = generateFood();
     score = 0;
     time = 0;
@@ -291,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 1000);
   }
 
+  /* 結束遊戲 */
   function endGame() {
     homeDisplay.style.display = 'block';
     containerDisplay.style.display = 'none';
@@ -305,6 +316,12 @@ document.addEventListener('DOMContentLoaded', () => {
     showMessage('你的紀錄已儲存到排行榜！', 5000);
   }
 
+  createBoard();
+  draw();
+
+  window.addEventListener('keydown', handleDirectionChange);
+
+  /* 難度選擇 */
   difficultyButtons.forEach(button => {
     button.addEventListener('click', event => {
       event.preventDefault();
@@ -313,11 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  window.addEventListener('keydown', handleDirectionChange);
-
-  createBoard();
-  draw();
-  
+  /* 按鈕點擊相關事件 */
   leaderboardButton.addEventListener('click', () => {
     const selectedLevel = parseInt(leaderboardSelect.value) || currentLevel;
     leaderboard.display(selectedLevel);
@@ -337,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
     helpModal.style.display = 'none';
   });
   
-  // 使視窗可拖曳
+  /* 幫助視窗拖曳 */
   helpModal.addEventListener('mousedown', function(e) {
     let offsetX = e.clientX - helpModal.offsetLeft;
     let offsetY = e.clientY - helpModal.offsetTop;
@@ -363,7 +376,8 @@ document.addEventListener('DOMContentLoaded', () => {
   helpModal.ondragstart = function() {
     return false;
   };
-  // 使排行榜視窗可拖曳
+
+  /* 排行榜視窗拖曳 */
   leaderboardModal.addEventListener('mousedown', function(e) {
     let offsetX = e.clientX - leaderboardModal.offsetLeft;
     let offsetY = e.clientY - leaderboardModal.offsetTop;

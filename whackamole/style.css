@@ -1,4 +1,6 @@
-/* 遊戲背景樣式 */
+/* 
+遊戲背景設定
+ */
 html, body {
     width: 100%;
     height: 100%;
@@ -18,7 +20,6 @@ html, body, input {
     font-family: "Gill Sans MT Ext Condensed Bold";
     text-shadow: #333 1px 1px 1px;
 }
-
 a {
     color: #333;
     text-shadow: #666 1px 1px 1px;
@@ -30,13 +31,14 @@ a:hover {
     color: black;
     text-shadow: #333 1px 1px 1px;
 }
-
 input {
     color: #333;
     text-shadow: #666 1px 1px 1px;
 }
 
-
+/* 
+遊戲首頁設定
+*/
 #home {
     display: block;
     flex-direction: column;
@@ -53,20 +55,21 @@ input {
     background-size: cover;
     background-position: center;
 }
-
 #home h1 {
     color: rgb(255, 196, 0);
     font-size: 60px;
     margin: 50px 0;   
 }
-
 #home label, #home select {
     font-size: 28px;
     padding: 5px 0px;
 }
 
+/*
+首頁按鈕樣式
+*/
 #leaderboard {
-    margin: 100px 0;
+    margin: 120px -50px;
     padding: 10px 20px;
     font-size: 32px;
     cursor: pointer;
@@ -75,10 +78,19 @@ input {
     border: none;
     border-radius: 5px;
 }
-
+#help {
+    margin: 120px 100px;
+    padding: 10px 20px;
+    font-size: 32px;
+    cursor: pointer;
+    background: rgb(0, 0, 0, 0);
+    color:rgb(255, 255, 255);
+    border: none;
+    border-radius: 5px;
+}
 #start {
-    margin: -30px 0;
-    padding: 10px 200px;
+    margin: -50px 0;
+    padding: 10px 50px;
     font-size: 32px;
     cursor: pointer;
     background: #000000b0;
@@ -87,8 +99,10 @@ input {
     border-radius: 5px;
 }
 
-/* Game Design */
 
+/* 
+遊戲容器設定 
+*/
 #container {
     display: none;
     flex-direction: column;
@@ -114,18 +128,20 @@ input {
     font-size: 30px;
     color: rgb(5, 134, 255);
 }
-
+/* 分數顯示 */
 #scoreDisplay {
     margin: 0 0 0 5px;
     text-align: left;
 }
-
+/* 時間顯示 */
 #timeDisplay {
     margin: 0 15px;
     text-align: right;
 }
 
-/* 遊戲區域 */
+/* 
+遊戲主體區域 
+*/
 #game {
     margin: 25px 0;
     display: grid;
@@ -139,7 +155,7 @@ input {
     z-index: 9;
 }
 
-
+/* 地洞地鼠樣式 */
 .hole .mole{
     width: 70%;
     position: absolute;
@@ -156,7 +172,7 @@ input {
         transform: translateX(-50%) translateY(0);
     }
 }
-
+/* 地洞樣式 */
 .hole {
     width: 150px;
     height: 150px;
@@ -168,6 +184,7 @@ input {
     position: relative;
     overflow: hidden;
   }
+/* 地鼠樣式 */
 .mole {
     width: 200px;
     height: 200px;
@@ -177,6 +194,8 @@ input {
     cursor: pointer;
     transition: transform 0.2s;
 }
+
+/* 滑鼠樣式 */
 .cursor{
     margin: -250px -560px;
     height: 300px;
@@ -194,16 +213,15 @@ input {
 .hole.active .mole {
     transform: translate(-50%, -50%);
 }
-#score {
-    font-size: 24px;
-    margin-top: 10px;
-}
 
+/* 
+排行榜視窗設定 
+*/
 #leaderboard-modal {
     display: none;
     position: absolute;
-    top: 35%;
-    left: -35%;
+    top: 15%;
+    right: -85%;
     transform: translateX(-50%);
     width: 350px;
     font-size: 20px;
@@ -215,7 +233,7 @@ input {
     cursor: grabbing;
     z-index: 10;
 }
-
+/* 排行榜標題 */
 #leaderboard-header {
     list-style: none;
     padding: 0;
@@ -225,42 +243,82 @@ input {
     font-size: 36px;
     text-align: left;
 }
+/* 排行榜選擇時間 */
 #leaderboard-select {
     float: right;
     color: rgb(0, 0, 0);
     border: none;
     background-color: #ffffff7c;
 }
-
+/* 排行榜列表 */
 #leaderboard-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
+/* 排行榜列表項目 */
 #leaderboard-list li {
     margin: 5px 0;
     color: rgba(77, 249, 91, 0.766);
 }
-
+/* 排行榜列表項目第一名 */
 #leaderboard-list li:first-child {
     margin: 10px 0;
     font-size: 22px;
     color: rgb(50, 255, 67);
     font-weight: bold;
 }
-
+/* 排行榜列表項目無紀錄 */
 #leaderboard-none{
     color: rgb(200, 200, 200);
     display: none;
 }
-
+/* 排行榜關閉按鈕 */
 #close-leaderboard {
     margin: 20px 0 0 0;
     font-size: 20px;
     padding: 5px 10px;
     background: #ff5252;
     color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 
+幫助視窗樣式 
+*/
+#help-modal {
+    display: none;
+    position: absolute;
+    top: 15%;
+    right: 80%;
+    transform: translateX(-50%);
+    width: 450px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    background: rgba(173, 156, 0, 0.74);
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    text-shadow: none;  
+    z-index: 16;
+}
+/* 幫助視窗標題 */
+#help-modal h2 {
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+}
+/* 幫助視窗內容 */
+#help-modal p {
+    font-size: 20px;
+}
+/* 關閉按鈕 */
+#close-help {
+    margin: 10px;
+    font-size: 20px;
+    padding: 5px 10px;
+    background: rgb(173, 156, 0);
+    color: rgb(0, 0, 0);
     border: none;
     border-radius: 5px;
     cursor: pointer;
