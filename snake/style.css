@@ -1,6 +1,12 @@
 /* 
 遊戲背景設定
  */
+@keyframes backgroundPulse {
+    0% { background-color: rgba(0, 255, 255, 0.1); }
+    50% { background-color: rgba(0, 255, 255, 0.2); }
+    100% { background-color: rgba(0, 255, 255, 0.1); }
+}
+
 html, body {
     width: 100%;
     height: 100%;
@@ -14,11 +20,19 @@ html, body {
     align-items: center;
     font-size: 15px;
     overflow: auto;
+    animation: backgroundPulse 10s infinite;
 }
+
 html, body, input {
     color: black;
     font-family: "Gill Sans MT Ext Condensed Bold";
     text-shadow: #333 1px 1px 1px;
+}
+
+@keyframes linkHover {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 a {
@@ -26,11 +40,14 @@ a {
     text-shadow: #666 1px 1px 1px;
     text-decoration: none;
     outline: none;
-    font-size: 40px
+    font-size: 40px;
+    transition: all 0.3s ease;
 }
+
 a:hover {
     color: rgba(255, 41, 41, 0.8);
     text-shadow: #333 1px 1px 1px;
+    animation: linkHover 1s infinite;
 }
 
 input {
@@ -41,6 +58,17 @@ input {
 /* 
 遊戲首頁設定
 */
+@keyframes homeAppear {
+    from { 
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 #home {
     display: block;
     flex-direction: column;
@@ -53,12 +81,22 @@ input {
     border-radius: 9px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     z-index: 10;
+    animation: homeAppear 0.5s ease-out;
 }
+
+@keyframes titleGlow {
+    0% { text-shadow: 0 0 5px rgba(255, 41, 41, 0.5); }
+    50% { text-shadow: 0 0 20px rgba(255, 41, 41, 0.8); }
+    100% { text-shadow: 0 0 5px rgba(255, 41, 41, 0.5); }
+}
+
 #home h1 {
     color: rgba(255, 41, 41);
     font-size: 60px;
     margin: 50px 0;   
+    animation: titleGlow 2s infinite;
 }
+
 #home ul {
     position: absolute;
     top: 250px;
@@ -73,6 +111,12 @@ input {
 /*
 首頁按鈕樣式
 */
+@keyframes buttonPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 #help {
     margin-top: 300px;
     padding: 10px 20px;
@@ -82,7 +126,13 @@ input {
     color:rgba(210, 210, 210);
     border: none;
     border-radius: 5px;
+    transition: all 0.3s ease;
 }
+
+#help:hover {
+    animation: buttonPulse 1s infinite;
+}
+
 #leaderboard {
     margin-top: 0px;
     padding: 10px 20px;
@@ -92,6 +142,11 @@ input {
     color:rgb(150, 150, 150);
     border: none;
     border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+#leaderboard:hover {
+    animation: buttonPulse 1s infinite;
 }
 
 /*動態蛇樣式*/
@@ -107,6 +162,17 @@ input {
 /* 
 遊戲容器設定 
 */
+@keyframes containerAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 #container {
     display: none;
     flex-direction: column;
@@ -120,9 +186,16 @@ input {
     border-radius: 9px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 3;
+    animation: containerAppear 0.5s ease-out;
 }
 
 /* 內部標題區域 */
+@keyframes headerGlow {
+    0% { color: rgba(255, 41, 41, 0.8); }
+    50% { color: rgba(255, 41, 41, 1); }
+    100% { color: rgba(255, 41, 41, 0.8); }
+}
+
 #header {
     display: flex;
     justify-content: space-between;
@@ -131,7 +204,9 @@ input {
     margin-top: 10px;
     font-size: 40px;
     color: rgba(255, 41, 41);
+    animation: headerGlow 2s infinite;
 }
+
 #header div {
     flex: 1;
     text-align: center;
@@ -140,38 +215,111 @@ input {
 /* 
 遊戲主體區域 
 */
+@keyframes gameAppear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 #game {
     display: grid;
     margin-top: 35px;
     width: 600px;
     height: 600px;
-    border-top:  3px dashed #4c99af;
+    border-top: 3px dashed #4c99af;
     z-index: 9;
+    animation: gameAppear 0.5s ease-out;
 }
+
 /* 蛇的樣式 */
+@keyframes snakeBodySlide {
+    0% { 
+        transform: skew(-2deg) scale(0.98);
+        filter: brightness(95%);
+    }
+    50% { 
+        transform: skew(2deg) scale(1.02);
+        filter: brightness(105%);
+    }
+    100% { 
+        transform: skew(-2deg) scale(0.98);
+        filter: brightness(95%);
+    }
+}
+
 .snake {
     background-size: cover;
 }
+
 .snake-head {
     background-image: url('resource/snakehead.png');
     background-size: cover;
 }
+
 .snake-body {
     background-color: rgb(187, 216, 10);
     background-size: cover;
+    animation: snakeBodySlide 2s ease-in-out infinite;
 }
 
 /* 食物樣式 */
+@keyframes foodBounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
 .food {
     border-radius: 10px;
     background-color: red;
     background-image: url('resource/food.png');
     background-size: cover;
+    animation: foodBounce 1s infinite;
+}
+
+/* 
+訊息框樣式 
+*/
+@keyframes messagePop {
+    0% { transform: scale(0); opacity: 0; }
+    20% { transform: scale(1.2); opacity: 0.8; }
+    40% { transform: scale(0.9); opacity: 1; }
+    60% { transform: scale(1); opacity: 1; }
+    80% { transform: scale(1); opacity: 1; }
+    90% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+#message-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: rgb(255, 0, 255);
+    font-size: 36px;
+    text-align: center;
+    padding: 2px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    animation: messagePop 3s ease-in-out infinite;
 }
 
 /* 
 幫助視窗樣式 
 */
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%);
+    }
+}
+
 #help-modal {
     display: none;
     position: absolute;
@@ -186,16 +334,26 @@ input {
     border-radius: 10px;
     text-shadow: none;  
     z-index: 16;
+    animation: modalSlide 0.3s ease-out;
 }
+
 /* 幫助視窗標題 */
 #help-modal h2 {
     font-size: 24px;
 }
+
 /* 幫助視窗內容 */
 #help-modal p {
     font-size: 20px;
 }
+
 /* 關閉按鈕 */
+@keyframes buttonHover {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
 #close-help {
     margin: 10px 0 0 200px;
     font-size: 20px;
@@ -205,11 +363,27 @@ input {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#close-help:hover {
+    animation: buttonHover 1s infinite;
 }
 
 /* 
 排行榜視窗樣式 
 */
+@keyframes leaderboardSlide {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%);
+    }
+}
+
 #leaderboard-modal {
     display: none;
     position: absolute;
@@ -226,7 +400,9 @@ input {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     cursor: grabbing;
     z-index: 15;
+    animation: leaderboardSlide 0.3s ease-out;
 }
+
 /* 排行榜標題 */
 #leaderboard-header {
     list-style: none;
@@ -236,6 +412,7 @@ input {
     font-weight: bold;
     font-size: 36px;
 }
+
 /* 排行榜難度選擇 */
 #leaderboard-select {
     text-align: right;
@@ -244,30 +421,56 @@ input {
     color: rgb(0, 0, 0);
     border: none;
     background-color: #ffffff7c;
+    transition: all 0.3s ease;
 }
+
 /* 排行榜列表 */    
 #leaderboard-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
+
+@keyframes listItemAppear {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 /* 排行榜列表項目 */    
 #leaderboard-list li {
     margin: 5px 0;
-    color: rgba(255, 132, 50, 0.8);;
+    color: rgba(255, 132, 50, 0.8);
+    animation: listItemAppear 0.3s ease-out;
+    animation-fill-mode: both;
 }
+
 /* 排行榜列表項目(第一名) */
+@keyframes firstPlaceGlow {
+    0% { text-shadow: 0 0 5px rgba(255, 114, 20, 0.5); }
+    50% { text-shadow: 0 0 20px rgba(255, 114, 20, 0.8); }
+    100% { text-shadow: 0 0 5px rgba(255, 114, 20, 0.5); }
+}
+
 #leaderboard-list li:first-child {
     margin: 10px 0;
     font-size: 22px;
     color: rgb(255, 114, 20);
     font-weight: bold;
+    animation: firstPlaceGlow 2s infinite;
 }
+
 /* 排行榜列表項目(無資料) */
 #leaderboard-none{
     color: gray;
     display: none;
 }
+
 /* 關閉排行榜按鈕 */
 #close-leaderboard {
     margin: 10px 0 0 320px;
@@ -278,4 +481,9 @@ input {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#close-leaderboard:hover {
+    animation: buttonHover 1s infinite;
 }

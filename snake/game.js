@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const scoreDisplay = document.getElementById('score');
   const timeDisplay = document.getElementById('time');
   const levelDisplay = document.getElementById('level');
+  const messageBox = document.getElementById('message-box');
   const difficultyButtons = document.querySelectorAll('a[data-action="play"]');
   const leaderboardButton = document.getElementById('leaderboard');
   const leaderboardModal = document.getElementById('leaderboard-modal');
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let gameInterval;
   let timeInterval;
   let speed = 200;
+  let isPaused = false;
 
   /* 初始化排行榜 */
   const leaderboard = {
@@ -123,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(leaderboard));
       } catch (e) {
         console.error('Error saving to leaderboard:', e);
-        showMessage('儲存排行榜時發生錯誤');
+        showMessage('儲存排行榜時發生錯誤', 3000);
       }
     },
     // 匿名設定
@@ -211,6 +213,27 @@ document.addEventListener('DOMContentLoaded', () => {
     return 0;
   }
 
+  /* 暫停&繼續遊戲 */
+  function togglePause() {
+    if (!gameInterval) return;
+    
+    if (isPaused) {
+      // 繼續遊戲
+      gameInterval = setInterval(moveSnake, speed);
+      timeInterval = setInterval(() => {
+        time += 1;
+        timeDisplay.textContent = `時間: ${time}`;
+      }, 1000);
+      isPaused = false;
+      showMessage('遊戲繼續', 1000);
+    } else {
+      // 暫停遊戲
+      clearInterval(gameInterval);
+      clearInterval(timeInterval);
+      isPaused = true;
+      showMessage('遊戲暫停中，點擊滑鼠右鍵繼續', 0);
+    }
+  }
 
   /* 移動蛇 */
   function moveSnake() {
@@ -237,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreDisplay.textContent = `長度: ${score}`;
       food = generateFood();
       clearInterval(gameInterval);
-      speed = Math.max(50, speed - 10); // Increase speed
+      speed = Math.max(50, speed - 10);
       gameInterval = setInterval(moveSnake, speed);
     } else {
       snake.pop();
@@ -269,6 +292,8 @@ document.addEventListener('DOMContentLoaded', () => {
       direction = { x: -1, y: 0 };
     } else if (key === 'ArrowRight' && direction.x === 0) {
       direction = { x: 1, y: 0 };
+    } else if (key === 'p' || key === 'P') {
+      togglePause();
     }
   }
   
@@ -282,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     food = generateFood();
     score = 0;
     time = 0;
+    isPaused = false;
     scoreDisplay.textContent = `長度: ${score}`;
     timeDisplay.textContent = `時間: ${time}`;
     speed = 400 - (selectedLevel - 1) * 50; 
@@ -313,13 +339,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (leaderboardModal.style.display === 'block') {
       leaderboard.display(currentLevel);
     }
-    showMessage('你的紀錄已儲存到排行榜！', 5000);
+    showMessage('你的紀錄已儲存到排行榜！', 3000);
   }
 
   createBoard();
   draw();
 
   window.addEventListener('keydown', handleDirectionChange);
+  window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    if (gameInterval) {
+      togglePause();
+    }
+  });
 
   /* 難度選擇 */
   difficultyButtons.forEach(button => {
@@ -329,6 +361,20 @@ document.addEventListener('DOMContentLoaded', () => {
       startGame(level);
     });
   });
+  /* 顯示訊息 */
+  function showMessage(message, duration = 0) {
+    messageBox.textContent = message;
+    messageBox.style.display = 'block';
+    
+    if (messageBox.hideTimeout) {
+      clearTimeout(messageBox.hideTimeout);
+    }
+    if (duration > 0) {
+      messageBox.hideTimeout = setTimeout(() => {
+        messageBox.style.display = 'none';
+      }, duration);
+    }
+  }
 
   /* 按鈕點擊相關事件 */
   leaderboardButton.addEventListener('click', () => {

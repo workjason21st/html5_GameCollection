@@ -236,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.game.appendChild(cellElement);
       });
     });
+    
   }
   /* 創建遊戲格子 */
   function createCellElement(cell, x, y) {
@@ -305,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cell.count === 0) {
       revealAdjacentCells(x, y);
     }
-
+    
     renderBoard();
     checkWinCondition();
   }

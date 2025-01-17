@@ -26,6 +26,12 @@ body {
 /* 
 網站頁面總標題 
 */
+@keyframes headerGlow {
+    0% { box-shadow: 0 3px rgba(0, 0, 0, 0.8); }
+    50% { box-shadow: 0 3px rgba(255, 255, 0, 0.5); }
+    100% { box-shadow: 0 3px rgba(0, 0, 0, 0.8); }
+}
+
 header {
     position: absolute;
     box-sizing: border-box;
@@ -39,7 +45,15 @@ header {
     background: rgba(20, 20, 20, 0.8);
     border-left: 10px inset rgb(255, 255, 0);
     transition: all 0.5s;
+    animation: headerGlow 20s infinite;
 }
+
+@keyframes titlePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 header h1 {
     display: inline-block;
     margin: 0;
@@ -49,7 +63,9 @@ header h1 {
     font-size: 20px;
     font-weight: normal;
     text-transform: capitalize;
+    animation: titlePulse 3s infinite;
 }
+
 header p {
     display: inline-block;
     margin: 0;
@@ -58,19 +74,24 @@ header p {
     font-style: italic;
     transition: opacity 0.5s;
 }
+
 header:hover {
     height: 80px;
 }
+
 header:hover #expand {
     opacity: 0;
 }
+
 header:hover #select {
     opacity: 1;
 }
+
 #select {
     position: relative;
     left: -100px;
     opacity: 0;
+    transition: all 0.5s ease;
 }
 
 /* 遊戲執行區 */
@@ -84,13 +105,20 @@ iframe {
 /* 
 遊戲列表 
 */
+@keyframes navItemSlide {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
 #nav {
     list-style: none;
     margin: 5px;
 }
+
 #nav li {
     display: inline-block;
 }
+
 #nav a {
     position: relative;
     margin: 2px 3px;
@@ -104,13 +132,23 @@ iframe {
     line-height: 18px;
     color: #BBB;
     opacity: 0;
-    transition: opacity 0.5s;
+    transition: all 0.5s;
 }
+
 header:hover #nav a {
     opacity: 1;
+    animation: navItemSlide 0.5s ease-out forwards;
 }
+
+@keyframes linkGlow {
+    0% { color: #BBB; text-shadow: none; }
+    50% { color: white; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    100% { color: #BBB; text-shadow: none; }
+}
+
 #nav a:hover {
     color: white;
+    animation: linkGlow 1s infinite;
 }
 
 #nav a::after {
@@ -124,6 +162,7 @@ header:hover #nav a {
     letter-spacing: -4px;
     color: #646464;
 }
+
 #nav li:first-child a::before {
     content: "//";
     position: absolute;
@@ -138,4 +177,5 @@ header:hover #nav a {
 
 #nav li a.selected {
     color: white;
+    text-shadow: 0 0 8px rgba(255,255,255,0.8);
 }

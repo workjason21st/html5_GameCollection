@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cursor = document.querySelector('.cursor');
   const startButton = document.getElementById('start');
   const timeSelect = document.getElementById('time');
+  const messageBox = document.getElementById('message-box');
   const leaderboardButton = document.getElementById('leaderboard');
   const leaderboardModal = document.getElementById('leaderboard-modal');
   const leaderboardNone = document.getElementById('leaderboard-none');
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let gameTime = 60;
   let gameInterval;
   let countdownInterval;
+  let isPaused = false;
   const STORAGE_KEY = 'whackamoleLeaderboard';
 
   /* 遊戲開始 */
@@ -50,16 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* 地鼠點擊 */
     img.addEventListener('click', () => {
-      score += 1;
-      scoreDisplay.textContent = `分數: ${score}`;
-      img.src = 'resource/mole3.png';
-      img.style.height = '100px';
-      img.style.top = '70px';
-      clearTimeout(timer);
-      setTimeout(() => {
-        hole.removeChild(img);
-        run();
-      }, 500);
+      if (!isPaused) {
+        score += 1;
+        scoreDisplay.textContent = `分數: ${score}`;
+        img.src = 'resource/mole3.png';
+        img.style.height = '100px';
+        img.style.top = '70px';
+        clearTimeout(timer);
+        setTimeout(() => {
+          hole.removeChild(img);
+          run();
+        }, 500);
+      }
     });
 
     hole.appendChild(img);
@@ -70,33 +74,53 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hole.contains(img)) {
         hole.removeChild(img);
       }
-      run();
+      if (!isPaused) {
+        run();
+      }
     }, randomTime);
   }
 
   /* 遊戲倒數 */
   function startCountdown() {
     countdownInterval = setInterval(() => {
-      gameTime--;
-      timeDisplay.textContent = `時間: ${gameTime}`;
-      /* 遊戲結束 */
-      if (gameTime <= 0) {
-        clearInterval(countdownInterval);
-        clearInterval(gameInterval);
-        
-        containerDisplay.style.display = 'none';
-        homeDisplay.style.display = 'block';
-    
-        const playerName = prompt(`遊戲結束！你的分數是 ${score}！請輸入你的名字：`,'玩家');
-        const time = timeSelect.value;
-        
-        leaderboard.save(playerName, score, time);
-        if (leaderboardModal.style.display === 'block') {
-          leaderboard.display(difficulty);
+      if (!isPaused) {
+        gameTime--;
+        timeDisplay.textContent = `時間: ${gameTime}`;
+        /* 遊戲結束 */
+        if (gameTime <= 0) {
+          clearInterval(countdownInterval);
+          clearInterval(gameInterval);
+          
+          containerDisplay.style.display = 'none';
+          homeDisplay.style.display = 'block';
+      
+          const playerName = prompt(`遊戲結束！你的分數是 ${score}！請輸入你的名字：`,'玩家');
+          const time = timeSelect.value;
+          
+          leaderboard.save(playerName, score, time);
+          if (leaderboardModal.style.display === 'block') {
+            leaderboard.display(difficulty);
+          }
+          showMessage('你的紀錄已儲存到排行榜！', 5000);
         }
-        showMessage('你的紀錄已儲存到排行榜！', 5000);
       }
     }, 1000);
+  }
+
+  /* 暫停&繼續遊戲 */
+  function togglePause() {
+    if (!countdownInterval) return;
+    
+    if (isPaused) {
+      // 繼續遊戲
+      run();
+      isPaused = false;
+      showMessage('遊戲繼續', 1000);
+    } else {
+      // 暫停遊戲
+      isPaused = true;
+      showMessage('遊戲暫停中，點擊滑鼠右鍵繼續', 0);
+    }
   }
 
   /* 初始化排行榜 */
@@ -162,6 +186,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   
+  /* 顯示訊息 */
+  function showMessage(message, duration = 0) {
+    messageBox.textContent = message;
+    messageBox.style.display = 'block';
+    
+    if (messageBox.hideTimeout) {
+      clearTimeout(messageBox.hideTimeout);
+    }
+    if (duration > 0) {
+      messageBox.hideTimeout = setTimeout(() => {
+        messageBox.style.display = 'none';
+      }, duration);
+    }
+  }
+
   /* 遊戲開始按鈕 */
   startButton.addEventListener('click', startGame);
 
@@ -188,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
   timeSelect.addEventListener('change', () => {
     leaderboardSelect.value = timeSelect.value;
     if (leaderboardModal.style.display === 'block') {
-      leaderboard.display(timeSelect.value); // 即時更新排行榜顯示
+      leaderboard.display(timeSelect.value); 
     }
   });
 
@@ -202,6 +241,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   window.addEventListener('mouseup', () => {
     cursor.classList.remove('active');
+  });
+  window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    if (countdownInterval) {
+      togglePause();
+    }
   });
   
   /* 幫助視窗拖曳 */
