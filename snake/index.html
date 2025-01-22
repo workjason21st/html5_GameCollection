@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>貪食蛇</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./game.js"></script>
@@ -12,62 +12,65 @@
   <div id="home" class="homeScreen">
     <!-- 遊戲標題及動態蛇 -->
     <h1 id="snakeTitle">貪食蛇</h1>
-    <img class="dynamic_snake" id="dynamic_snake1" src="./resource/dynamic_snake.png" alt="蛇">
-    <img class="dynamic_snake" id="dynamic_snake2" src="./resource/dynamic_snake.png" alt="蛇蛇"> 
+    <img class="dynamic_snake" id="dynamic_snake1" src="./resource/dynamic_snake.png">
+    <img class="dynamic_snake" id="dynamic_snake2" src="./resource/dynamic_snake.png"> 
     <!-- 遊戲難度選擇 -->
     <ul>
-        <li><a href="#" data-action="play" data-level="1">簡單</a></li>
-        <li><a href="#" data-action="play" data-level="2">普通</a></li>
-        <li><a href="#" data-action="play" data-level="3">困難</a></li>
-        <li><a href="#" data-action="play" data-level="4">地獄</a></li>
+        <li><a href="#" data-action="play" data-level="1" role="button" aria-label="簡單模式">簡單</a></li>
+        <li><a href="#" data-action="play" data-level="2" role="button" aria-label="普通模式">普通</a></li>
+        <li><a href="#" data-action="play" data-level="3" role="button" aria-label="困難模式">困難</a></li>
+        <li><a href="#" data-action="play" data-level="4" role="button" aria-label="地獄模式">地獄</a></li>
     </ul>
     <br>
     <!-- 遊戲按鈕 -->
-    <button id="help">遊玩方式</button>
+    <button id="help" aria-label="查看遊玩方式">遊玩方式</button>
     <br>
-    <button id="leaderboard">查看排行榜</button>
+    <button id="leaderboard" aria-label="查看排行榜">查看排行榜</button>
   </div>
   <!-- 遊戲主體 -->
   <div id="container" class="gameScreen">
     <!-- 遊玩資訊顯示 -->
     <header id="header">
-      <div id="score">長度: 0</div>
-      <div id="level">難度: 1</div>
-      <div id="time">時間: 0</div>
+      <div id="score" aria-live="polite">長度: 0</div>
+      <div id="level" aria-live="polite">難度: 1</div>
+      <div id="time" aria-live="polite">時間: 0</div>
     </header>
-    <div id="game">
+    <div id="game" role="application" aria-label="貪食蛇遊戲區域">
     </div>
-    <div id="message-box">
-      <h2 id="message">遊戲暫停中，點擊滑鼠右鍵繼續</h2>
+    <div id="message-box" aria-live="assertive">
+      <h2 id="message">遊戲暫停中，點擊滑鼠右鍵或觸碰螢幕繼續</h2>
     </div>
   </div>
   <!-- 遊戲規則相關 -->
-  <div id="help-modal">
+  <div id="help-modal" role="dialog" aria-labelledby="help-title">
     <div id="help-content">
-      <h2>貪食蛇遊玩方式</h2>
-      <p>使用鍵盤🔼🔽◀️▶️控制貪食蛇的移動方向，</p>
+      <h2 id="help-title">貪食蛇遊玩方式</h2>
+      <p>電腦使用鍵盤🔼🔽◀️▶️控制貪食蛇的移動；</p>
+      <p>手機版使用螢幕滑動控制貪食蛇的移動方向，</p>
       <p>遊戲內有紅色方塊若將它吃掉可以讓蛇變長。</p>
-      <p>當蛇撞上藍色邊界牆或是自己的身體就會結束，</p>
-      <p>點擊滑鼠右鍵或是鍵盤P鍵可將遊戲暫停，</p>
+      <p>當蛇撞上藍色邊界牆或是自己的身體就會結束。</p>
+      <br>
+      <p>電腦版點擊滑鼠右鍵或是鍵盤P鍵暫停，</p>
+      <p>手機版輕觸蛇身暫停遊戲，</p>
       <p>努力取得最高的分數(長度)進入排行榜吧。</p>
       <br>
-      <button id="close-help">關閉</button>
+      <button id="close-help" aria-label="關閉說明">關閉</button>
     </div>
   </div>
   <!-- 排行榜相關 -->
-  <div id="leaderboard-modal">
-    <h2 id="leaderboard-header">長度排行榜
-    <select id="leaderboard-select">
+  <div id="leaderboard-modal" role="dialog" aria-labelledby="leaderboard-title">
+    <h2 id="leaderboard-title">長度排行榜
+    <select id="leaderboard-select" aria-label="選擇難度">
       <option value="1">簡單</option>
       <option value="2">普通</option>
       <option value="3">困難</option>
       <option value="4">地獄</option>
     </select>
     </h2>
-    <p id="leaderboard-none">目前沒有紀錄</p>
-    <ol id="leaderboard-list">
+    <p id="leaderboard-none" aria-live="polite">目前沒有紀錄</p>
+    <ol id="leaderboard-list" aria-live="polite">
     </ol>
-    <button id="close-leaderboard">關閉</button>
+    <button id="close-leaderboard" aria-label="關閉排行榜">關閉</button>
   </div>
 </body>
 </html>

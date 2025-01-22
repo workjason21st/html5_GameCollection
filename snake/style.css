@@ -1,7 +1,7 @@
 /* 
 遊戲背景設定
  */
-@keyframes backgroundPulse {
+ @keyframes backgroundPulse {
     0% { background-color: rgba(0, 255, 255, 0.1); }
     50% { background-color: rgba(0, 255, 255, 0.2); }
     100% { background-color: rgba(0, 255, 255, 0.1); }
@@ -54,6 +54,7 @@ input {
     color: #333;
     text-shadow: #666 1px 1px 1px;
 }
+
 
 /* 
 遊戲首頁設定
@@ -157,6 +158,44 @@ input {
     background-size: cover;
     border-radius: 50%;
     z-index: 20;
+}
+
+
+/*
+手機版首頁設計
+*/
+@media screen and (max-width: 768px) {
+    html, body {
+        font-size: 12px;
+    }
+    a {
+        font-size: 32px;
+    }
+    #home {
+        width: 90%;
+        height: auto;
+        min-height: 500px;
+        margin-top: 150px;
+    }
+    #home h1 {
+        font-size: 40px;
+        margin: 30px 0;
+    }
+    #home ul {
+        top: 120px;
+        margin: 20px 0;
+    }
+    #help {
+        margin-top: 250px;
+        font-size: 24px;
+    }
+    #leaderboard {
+        font-size: 24px;
+    }
+    .dynamic_snake {
+        width: 30px;
+        height: 30px;
+    }
 }
 
 /* 
@@ -291,10 +330,9 @@ input {
 
 #message-box {
     display: none;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 35%;
-    transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.8);
     color: rgb(255, 0, 255);
     font-size: 36px;
@@ -487,3 +525,63 @@ input {
 #close-leaderboard:hover {
     animation: buttonHover 1s infinite;
 }
+
+/*
+手機版遊戲設定
+*/
+@media screen and (max-width: 768px) {
+    #container {
+        width: 90%;
+        height: auto;
+        margin-top: 150px;
+    }
+    #header {
+        width: 100%;
+        font-size: 24px;
+    }
+    #game {
+        width: 90vw;
+        height: 90vw;
+        margin-top: 20px;
+    }
+    #message-box {
+        font-size: 20px;
+        padding: 2px 20px;
+        top: 15%;
+    }
+    #help-modal {
+        background: rgb(0, 2, 114);
+        width: 90%;
+        right: auto;
+        left: 50%;
+    }
+    #help-modal h2 {
+        font-size: 20px;
+    }
+    #help-modal p {
+        font-size: 16px;
+    }
+    #close-help {
+        margin: 10px 0 0 170px;
+        font-size: 16px;
+    }
+    #leaderboard-modal {
+        background: rgb(255, 255, 255);
+        width: 80%;
+        left: 50%;
+        font-size: 16px;
+    }
+    #leaderboard-header {
+        font-size: 24px;
+    }
+    #leaderboard-select {
+        font-size: 20px;
+    }
+    #leaderboard-list li:first-child {
+        font-size: 18px;
+    }
+    #close-leaderboard {
+        margin: 10px 0 0 auto;
+        font-size: 16px;
+    }
+}   

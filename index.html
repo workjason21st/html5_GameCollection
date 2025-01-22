@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>HTML5 小遊戲</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -23,6 +23,12 @@
   <!-- 遊戲執行區 -->
   <iframe id="machine"></iframe>
   <script>
+    // 檢查是否為手機版畫面
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    // 根據裝置類型設定文字
+    if(isMobile) {
+        document.getElementById("expand").innerHTML = "點擊查看更多小遊戲";
+    }
     // 遊戲選擇
     function play(game) {
         "use strict";
@@ -37,6 +43,8 @@
         "use strict";
         const header = document.querySelector("header");
         play(location.hash.substring(1) || "minesweeper");
+        
+        // 導航選單點擊事件
         document.querySelector("#nav").addEventListener("click", (e) => {
             if (e.target.dataset.game) {
                 play(e.target.dataset.game);

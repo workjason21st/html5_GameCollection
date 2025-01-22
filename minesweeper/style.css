@@ -22,6 +22,15 @@ html, body {
     overflow: auto;
 }
 
+@media screen and (max-width: 768px) {
+    html, body {
+        font-size: 12px;
+    }
+    a {
+        font-size: 32px;
+    }
+}
+
 @keyframes textGlow {
     0% { text-shadow: #333 1px 1px 1px; }
     50% { text-shadow: #333 2px 2px 3px; }
@@ -39,7 +48,6 @@ html, body, input {
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
-
 a {
     color: #333;
     text-shadow: #666 1px 1px 1px;
@@ -49,7 +57,6 @@ a {
     transition: all 0.3s ease;
     animation: linkPulse 2s infinite;
 }
-
 a:hover {
     color: black;
     text-shadow: #333 1px 1px 1px;
@@ -88,7 +95,7 @@ input:focus {
     border-radius: 5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 3;
-    animation: containerFloat 6s infinite ease-in-out;
+    animation: containerFloat 15s infinite ease-in-out;
     transition: all 0.3s ease;
 }
 
@@ -155,6 +162,58 @@ input:focus {
     animation: difficultyPulse 2s infinite;
 }
 
+/* 手機版響應式設計 */
+    @media screen and (max-width: 768px) {
+        #container {
+            width: 95%;
+            height: auto;
+            margin-top: 150px;
+        }
+        
+        #header {
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 1px;
+            padding: 10px 0;
+        }
+        
+        #header select {
+            font-size: 14px;
+            width: 200px;
+            padding: 3px 5px;
+            margin: 2px;
+        }
+        #header select, #header select:hover{
+            transform: none;
+        }
+        
+        #header button {
+            font-size: 14px;
+            margin: 0 0px;
+        }
+        
+        #header span {
+            font-size: 14px;
+            margin: 2px 10px;
+        }
+        #leaderboard{
+            width: 200px;
+        }
+        #help {
+            width: 100px;
+        }
+        
+        /* 第1行元素 */
+        #leaderboard, #help {
+            order: 1;
+        }
+
+        /* 第2行元素 */
+        #difficulty, #reset, #flags, #timer {
+            order: 2;
+        }
+}
+
 /*
 遊戲規則框樣式
 */
@@ -186,6 +245,8 @@ input:focus {
     font-size: 20px;
     transform: scale(0.9);
     animation: modalFade 0.3s ease-in forwards;
+    max-width: 90%;
+    margin: 0 20px;
 }
 
 #rules-content h2 {
@@ -237,6 +298,21 @@ input:focus {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     animation: messagePop 5s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+    #rules-modal {
+        margin-top: 50px;
+    }
+    #rules-content {
+        font-size: 16px;
+        padding: 15px;
+    }
+    #message-box {
+        font-size: 24px;
+        padding: 2px 20px;
+        left: 5%;
+    }
 }
 
 /* 
@@ -318,6 +394,22 @@ input:focus {
     animation: flagWave 3s infinite;
 }
 
+@media screen and (max-width: 768px) {
+    #game {
+        width: 100%;
+        height: auto;
+    }
+    .cell {
+        font-size: 14px;
+    }
+    .cell.mine {
+        font-size: 16px;
+    }
+    .cell.flagged {
+        font-size: 16px;
+    }
+}
+
 /* 根據數字顯示不同背景顏色 */
 .cell.number-1 {
     background-color: #e0e0e0;
@@ -356,16 +448,16 @@ input:focus {
 幫助框樣式 
 */
 @keyframes helpSlide {
-    from { transform: translate(-50%, -100%); opacity: 0; }
-    to { transform: translate(-50%, -50%); opacity: 1; }
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(-50%); opacity: 1; }
 }
 
 #help-modal {
     display: none;
     position: fixed;
     top: 30%;
-    left: 145%;
-    transform: translate(-50%, -50%);
+    left: 120%;
+    transform: translate(0, -50%);
     width: 400px;
     text-align: left;
     color: rgb(0, 0, 0);
@@ -375,20 +467,29 @@ input:focus {
     animation: helpSlide 0.3s ease-out;
 }
 
+@media screen and (max-width: 768px) {
+    #help-modal {
+        background: rgb(199, 199, 199);
+        width: 100%;
+        left: 0%;
+        top: 60%;
+    }
+}
+
 /* 
 排行榜樣式 
 */
 @keyframes leaderboardSlide {
-    from { transform: translateX(-100%); opacity: 0; }
-    to { transform: translateX(-50%); opacity: 1; }
+    from { transform: translateY(0%); opacity: 0; }
+    to { transform: translateY(-50%); opacity: 1; }
 }
 
 #leaderboard-modal {
     display: none;
     position: absolute;
     top: 20%;
-    left: -40%;
-    transform: translateX(-50%);
+    left: -70%;
+    transform: translate(0, -50%);
     width: 300px;
     font-size: 20px;
     background: rgba(0, 0, 0, 0.7);
@@ -473,4 +574,21 @@ input:focus {
 #close-leaderboard:hover {
     background: #ff0000;
     transform: scale(1.1);
+}
+
+@media screen and (max-width: 768px) {
+    #leaderboard-modal {
+        width: 90%;
+        left: 0%;
+        top: 60%;
+        transform: translate(0, -50%);
+        font-size: 16px;
+        background: rgba(0, 0, 0, 0.95);
+    }
+    #leaderboard-list li:first-child {
+        font-size: 18px;
+    }
+    #close-leaderboard {
+        font-size: 16px;
+    }
 }

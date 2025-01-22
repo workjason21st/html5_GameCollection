@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let countdownInterval;
   let isPaused = false;
   const STORAGE_KEY = 'whackamoleLeaderboard';
+  const isMobile = window.innerWidth < 768;
 
   /* 遊戲開始 */
   function startGame() {
@@ -119,7 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // 暫停遊戲
       isPaused = true;
-      showMessage('遊戲暫停中，點擊滑鼠右鍵繼續', 0);
+      if (isMobile) {
+        showMessage('遊戲暫停中，長擊遊戲螢幕繼續', 0);
+      }
+      else {
+        showMessage('遊戲暫停中，點擊滑鼠右鍵繼續', 0);
+      }
     }
   }
 
@@ -191,6 +197,14 @@ document.addEventListener('DOMContentLoaded', () => {
     messageBox.textContent = message;
     messageBox.style.display = 'block';
     
+    // 根據訊息長度和裝置調整位置
+    const messageLength = message.length;
+    if (isMobile) {
+      messageBox.style.left = '1%';
+    } else {
+      messageBox.style.left = messageLength > 6 ? '0%' : '30%';
+    }
+
     if (messageBox.hideTimeout) {
       clearTimeout(messageBox.hideTimeout);
     }
@@ -249,6 +263,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
+  /* 手機版長擊繼續遊戲 */
+  let touchStart = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStart = e.touches[0].clientX;
+  }, false);
+
+  document.addEventListener('touchend', function(e) {
+    if (e.changedTouches[0].clientX === touchStart && isPaused) {
+      togglePause();
+    }
+  }, false);
+
   /* 幫助視窗拖曳 */
   helpModal.addEventListener('mousedown', function(e) {
     let offsetX = e.clientX - helpModal.offsetLeft;

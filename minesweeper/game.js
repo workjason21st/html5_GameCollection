@@ -1,13 +1,35 @@
 /* 遊戲設定 */
 const GAME_CONFIG = {
-  easy: { size: 8, mines: 10, cellSize: 86 },
-  medium: { size: 16, mines: 40, cellSize: 42 },
-  hard: { size: 24, mines: 99, cellSize: 27.2 }
+  easy: { 
+    size: 8,
+    mines: 10,
+    cellSize: {
+      desktop: 86,
+      mobile: 49
+    }
+  },
+  medium: { 
+    size: 16,
+    mines: 40,
+    cellSize: {
+      desktop: 42,
+      mobile: 23.5
+    }
+  },
+  hard: { 
+    size: 24,
+    mines: 99,
+    cellSize: {
+      desktop: 27.2,
+      mobile: 15
+    }
+  }
 };
 
 const STORAGE_KEY = 'minesweeperLeaderboard';
 const MESSAGE_DURATION = 3000;
 const MAX_PLAYER_NAME_LENGTH = 20;
+const MOBILE_BREAKPOINT = 768; // 手機版斷點
 
 document.addEventListener('DOMContentLoaded', () => {
   /* DOM 元素 */
@@ -38,7 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
     timeElapsed: 0,
     gameStarted: false,
     gameOver: false,
-    firstClick: true
+    firstClick: true,
+    isMobile: window.innerWidth < MOBILE_BREAKPOINT,
+    longPressTimer: null,
+    lastTouchTime: 0
   };
 
   /* 方向陣列，用於檢查周圍格子 */
@@ -135,7 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
     cleanupGame();
     // 遊戲設定
     const config = GAME_CONFIG[elements.difficultySelect.value];
-    const { size, mines, cellSize } = config;
+    const { size, mines } = config;
+    const cellSize = gameState.isMobile ? config.cellSize.mobile : config.cellSize.desktop;
+    
     // 遊戲狀態
     Object.assign(gameState, {
       flagsLeft: mines,
@@ -257,13 +284,37 @@ document.addEventListener('DOMContentLoaded', () => {
       element.textContent = '🚩';
     }
 
-    element.addEventListener('click', () => handleCellClick(x, y));
-    element.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      if (!gameState.gameOver) {
-        toggleFlag(x, y);
-      }
-    });
+    if (gameState.isMobile) {
+      // 手機版觸控事件
+      element.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const now = Date.now();
+        gameState.longPressTimer = setTimeout(() => {
+          if (!gameState.gameOver) {
+            toggleFlag(x, y);
+          }
+        }, 500);
+        gameState.lastTouchTime = now;
+      });
+
+      element.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        clearTimeout(gameState.longPressTimer);
+        const touchDuration = Date.now() - gameState.lastTouchTime;
+        if (touchDuration < 500) {
+          handleCellClick(x, y);
+        }
+      });
+    } else {
+      // 電腦版滑鼠事件
+      element.addEventListener('click', () => handleCellClick(x, y));
+      element.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        if (!gameState.gameOver) {
+          toggleFlag(x, y);
+        }
+      });
+    }
 
     return element;
   }
@@ -409,6 +460,15 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.messageBox.textContent = message;
     elements.messageBox.style.display = 'block';
     
+    // 根據訊息長度和裝置調整位置
+    const messageLength = message.length;
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      elements.messageBox.style.left = messageLength > 6 ? '5%' : '35%';
+    } else {
+      elements.messageBox.style.left = messageLength > 6 ? '10%' : '30%';
+    }
+
     if (elements.messageBox.hideTimeout) {
       clearTimeout(elements.messageBox.hideTimeout);
     }
@@ -427,31 +487,40 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     elements.game.style.transform = `scale(${scale})`;
   }
-  /* 使排行榜視窗可拖曳 */
-  elements.leaderboardModal.addEventListener('mousedown', function(e) {
-    let offsetX = e.clientX - elements.leaderboardModal.offsetLeft;
-    let offsetY = e.clientY - elements.leaderboardModal.offsetTop;
 
-    function moveAt(pageX, pageY) {
-      elements.leaderboardModal.style.left = `${pageX - offsetX}px`;
-      elements.leaderboardModal.style.top = `${pageY - offsetY}px`;
-    }
-
-    function onMouseMove(e) {
-      moveAt(e.pageX, e.pageY);
-    }
-
-    document.addEventListener('mousemove', onMouseMove);
-
-    elements.leaderboardModal.addEventListener('mouseup', function() {
-      document.removeEventListener('mousemove', onMouseMove);
-      elements.leaderboardModal.onmouseup = null;
-    });
+  /* 監聽視窗大小變化 */
+  window.addEventListener('resize', () => {
+    gameState.isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+    initGame();
   });
 
-  elements.leaderboardModal.ondragstart = function() {
-    return false;
-  };
+  /* 使排行榜視窗可拖曳 */
+  if (!gameState.isMobile) {
+    elements.leaderboardModal.addEventListener('mousedown', function(e) {
+      let offsetX = e.clientX - elements.leaderboardModal.offsetLeft;
+      let offsetY = e.clientY - elements.leaderboardModal.offsetTop;
+
+      function moveAt(pageX, pageY) {
+        elements.leaderboardModal.style.left = `${pageX - offsetX}px`;
+        elements.leaderboardModal.style.top = `${pageY - offsetY}px`;
+      }
+
+      function onMouseMove(e) {
+        moveAt(e.pageX, e.pageY);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      elements.leaderboardModal.addEventListener('mouseup', function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        elements.leaderboardModal.onmouseup = null;
+      });
+    });
+
+    elements.leaderboardModal.ondragstart = function() {
+      return false;
+    };
+  }
 
   /* 鍵盤事件觸發 */
   document.addEventListener('keydown', (e) => {
@@ -502,10 +571,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   elements.resetButton.addEventListener('click', initGame);
-  elements.helpButton.addEventListener('mouseenter', () => {
-    elements.helpModal.style.display = 'block';
-  });
-  elements.helpButton.addEventListener('mouseleave', () => {
-    elements.helpModal.style.display = 'none';
-  });
+  if (gameState.isMobile) {
+    elements.helpButton.addEventListener('click', () => {
+      elements.helpModal.style.display = elements.helpModal.style.display === 'block' ? 'none' : 'block';
+    });
+  } else {
+    elements.helpButton.addEventListener('mouseenter', () => {
+      elements.helpModal.style.display = 'block';
+    });
+    elements.helpButton.addEventListener('mouseleave', () => {
+      elements.helpModal.style.display = 'none';
+    });
+  }
 });

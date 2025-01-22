@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const dynamicSnake2 = document.getElementById('dynamic_snake2');
   const top = 0;
   const left = 0;
-  const width = 560;
-  const height = 150;
+  const width = window.innerWidth < 768 ? 350 : 560; // 響應式寬度
+  const height = window.innerWidth < 768 ? 90 : 150; // 響應式高度
   // 定義兩條蛇的狀態
   let snakes = [
     { element: dynamicSnake1, position: 0, direction: 0, speed: 0.002 },
@@ -92,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let timeInterval;
   let speed = 200;
   let isPaused = false;
+  let cellSize = window.innerWidth < 768 ? 25.9 : 40; // 響應式格子大小
+  let longPressTimer;
+  let longPressTimeout;
 
   /* 初始化排行榜 */
   const leaderboard = {
@@ -156,8 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* 創建遊戲場地 */
   function createBoard() {
-    gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, 40px)`;
-    gameBoard.style.gridTemplateRows = `repeat(${boardSize}, 40px)`;
+    gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, ${cellSize}px)`;
+    gameBoard.style.gridTemplateRows = `repeat(${boardSize}, ${cellSize}px)`;
     for (let i = 0; i < boardSize * boardSize; i++) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
@@ -231,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearInterval(gameInterval);
       clearInterval(timeInterval);
       isPaused = true;
-      showMessage('遊戲暫停中，點擊滑鼠右鍵繼續', 0);
+      window.innerWidth < 768 ? showMessage('遊戲暫停中，輕觸蛇身繼續', 0) : showMessage('遊戲暫停中，點擊滑鼠右鍵繼續', 0);
     }
   }
 
@@ -296,6 +299,64 @@ document.addEventListener('DOMContentLoaded', () => {
       togglePause();
     }
   }
+
+  /* 手機觸控控制 */
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    
+    // 檢查是否點擊到蛇身
+    const cells = document.querySelectorAll('.cell');
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (element && element.classList.contains('snake')) {
+      if (gameInterval) {
+        togglePause();
+      }
+      return;
+    }
+  }, false);
+
+  document.addEventListener('touchend', function() {
+    clearTimeout(longPressTimer);
+  }, false);
+
+  document.addEventListener('touchmove', function(e) {
+    clearTimeout(longPressTimer);
+    
+    if (!touchStartX || !touchStartY) {
+      return;
+    }
+
+    let touchEndX = e.touches[0].clientX;
+    let touchEndY = e.touches[0].clientY;
+
+    let dx = touchEndX - touchStartX;
+    let dy = touchEndY - touchStartY;
+
+    // 確定滑動方向
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 0 && direction.x === 0) {
+        direction = { x: 1, y: 0 }; // 右
+      } else if (dx < 0 && direction.x === 0) {
+        direction = { x: -1, y: 0 }; // 左
+      }
+    } else {
+      if (dy > 0 && direction.y === 0) {
+        direction = { x: 0, y: 1 }; // 下
+      } else if (dy < 0 && direction.y === 0) {
+        direction = { x: 0, y: -1 }; // 上
+      }
+    }
+
+    touchStartX = 0;
+    touchStartY = 0;
+    e.preventDefault();
+  }, false);
   
   /* 開始遊戲 */
   function startGame(selectedLevel) {
@@ -342,6 +403,13 @@ document.addEventListener('DOMContentLoaded', () => {
     showMessage('你的紀錄已儲存到排行榜！', 3000);
   }
 
+  /* 視窗大小改變時重新設置遊戲場地 */
+  window.addEventListener('resize', () => {
+    cellSize = window.innerWidth < 768 ? 25.9 : 40;
+    gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, ${cellSize}px)`;
+    gameBoard.style.gridTemplateRows = `repeat(${boardSize}, ${cellSize}px)`;
+  });
+
   createBoard();
   draw();
 
@@ -365,6 +433,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function showMessage(message, duration = 0) {
     messageBox.textContent = message;
     messageBox.style.display = 'block';
+    
+    // 根據訊息長度和裝置調整位置
+    const messageLength = message.length;
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      messageBox.style.left = messageLength > 6 ? '15%' : '35%';
+    } else {
+      messageBox.style.left = messageLength > 6 ? '0%' : '30%';
+    }
     
     if (messageBox.hideTimeout) {
       clearTimeout(messageBox.hideTimeout);
