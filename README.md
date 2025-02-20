@@ -1,3 +1,50 @@
-"# html5_GameCollection" 
+# 🎮 HTML 小遊戲
+本專案是一款簡單的 HTML5 的網頁小遊戲合輯，玩家可以透過瀏覽器遊玩。遊戲包含不同的小遊戲，玩家能根據自己的需求選擇不同難度遊玩。
 
-play [game](https://workjason21st.github.io/html5_GameCollection/)
+➡️[點擊進入網站](https://workjason21st.github.io/html5_GameCollection/)
+
+## 🤖 功能特色
+- **遊戲選擇** - 透過遊戲頁面的下拉選單選擇不同的小遊戲。
+    #### 目前加入的小遊戲：
+    - 踩地雷💣
+    - 打地鼠🐀
+    - 貪食蛇🐍
+- **排行榜** - 完成遊戲分數計算，並將分數儲存至本地排行榜中顯示。
+- **碰撞檢測** - 實現物件的碰撞檢測，增強遊戲互動性。
+- **物件拖曳** - 支持物件的拖曳控制，提升遊戲體驗。
+- **RWD** - 完成響應式網頁設計，使不同裝置有更好的視覺體驗。
+
+## ⚙️ 使用技術
+HTML、CSS、JavaScript
+
+## 📚 專案架構
+📂 HTML 小遊戲
+
+├── 📂minesweeper      # 踩地雷遊戲
+
+│   ├── index.html   
+│   ├── game.js      
+│   └── style.css 
+
+├── 📂whackamole       # 打地鼠遊戲
+
+│   ├── index.html   
+│   ├── game.js      
+│   └── style.css  
+
+└── 📂snake            # 貪食蛇遊戲
+
+│   ├── index.html   
+│   ├── game.js      
+│   └── style.css  
+
+│
+
+├── index.html       # 遊戲主頁
+
+└── style.css        # 遊戲主設計
+
+## 📜 未來展望
+- 優化下拉選單在手機版的效能。
+- 改進動畫實作方式以提升效能。
+- 增加更多遊戲內容，如計分機制、更多關卡等。
